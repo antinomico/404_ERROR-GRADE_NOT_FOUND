@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "screens.h"
 
 //#if defined(PLATFORM_WEB)
 //    #include <emscripten/emscripten.h>
@@ -21,9 +22,7 @@ int main(void)
     //---------------------------------------------------------
     InitWindow(screenWidth, screenHeight, "Project PI");
 
-    Texture2D texture = LoadTexture("rsc\\HC.png");
-
-    float scale = 0.2f;
+    InitLogoCINScreen();
 
     //InitAudioDevice();      // Initialize audio device
 
@@ -48,13 +47,20 @@ int main(void)
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        BeginDrawing();
+        UpdateLogoCINScreen();
 
-        ClearBackground(RAYWHITE);
+        if (!FinishLogoCINScreen()) {
+            ClearBackground(RAYWHITE);
 
-        DrawTextureEx(texture, (Vector2) { screenWidth / 16, screenHeight / 4}, 0.0f, scale, WHITE);
+            BeginDrawing();
 
-        EndDrawing();
+            DrawLogoCINScreen();
+
+            EndDrawing();
+        }
+        else
+            break;
+
         //UpdateDrawFrame();
     }
 #endif
@@ -78,7 +84,7 @@ int main(void)
     //UnloadSound(fxCoin);
 
     //CloseAudioDevice();     // Close audio context
-    UnloadTexture(texture);
+    UnloadLogoCINScreen();
 
     CloseWindow();          // Close window and OpenGL context
     //--------------------------------------------------------------------------------------

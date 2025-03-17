@@ -131,9 +131,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="name_game.c" />
+    <ClCompile Include="screen_logo_cin.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\assets\HC.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="screens.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
