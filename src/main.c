@@ -2,6 +2,6 @@
 #include "raylib.h"
 
 int main() {
-	printf("Fuckk");
+	printf("Fuckkkkk");
 	return 0;
 }
