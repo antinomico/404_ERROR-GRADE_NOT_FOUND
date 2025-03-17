@@ -130,7 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.c" />
+    <ClCompile Include="name_game.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\..\Documents\HC.png" />
