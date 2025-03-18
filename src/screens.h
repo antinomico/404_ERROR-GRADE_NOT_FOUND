@@ -41,11 +41,11 @@ typedef enum GameScreen {
 
 //----------------------------------------------------------------------------------
 // Global Variables Declaration (shared by several modules)
-//----------------------------------------------------------------------------------
+//-----------------------------------------------8-----------------------------------
 extern GameScreen currentScreen;
-//extern Font font;
-//extern Music music;
-//extern Sound fxCoin;
+extern Font font;
+extern Music music;
+extern Sound fxCoin;
 
 #ifdef __cplusplus
 extern "C" {            // Prevents name mangling of functions

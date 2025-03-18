@@ -131,8 +131,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="name_game.c" />
+    <ClCompile Include="screen_ending.c" />
+    <ClCompile Include="screen_gameplay.c" />
     <ClCompile Include="screen_logo_cin.c" />
     <ClCompile Include="screen_logo_rl.c" />
+    <ClCompile Include="screen_options.c" />
+    <ClCompile Include="screen_title.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\assets\HC.png" />
