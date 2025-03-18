@@ -32,10 +32,11 @@
 typedef enum GameScreen {
 	UNKNOWN = -1,
 	LOGO_RL = 0,
-	TITLE = 1,
-	OPTIONS = 2,
-	GAMEPLAY = 3,
-	ENDING = 4
+	LOGO_CIN = 1,
+	TITLE = 2,
+	OPTIONS = 3,
+	GAMEPLAY = 4,
+	ENDING = 5
 }	GameScreen;
 
 //----------------------------------------------------------------------------------

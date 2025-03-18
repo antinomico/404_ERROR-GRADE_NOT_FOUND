@@ -50,13 +50,13 @@ int main(void)
         UpdateLogoCINScreen();
 
         if (!FinishLogoCINScreen()) {
-            ClearBackground(RAYWHITE);
 
             BeginDrawing();
+            ClearBackground(RAYWHITE);
 
             DrawLogoCINScreen();
-
             EndDrawing();
+
         }
         else
             break;
