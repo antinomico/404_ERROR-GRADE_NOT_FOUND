@@ -4,37 +4,29 @@
 static int framesCounter = 0;
 static int finishScreen = 0;
 
-static int logoPositionX = 0;
-static int logoPositionY = 0;
-
 static int widthLogo = 0;
 static int heightLogo = 0;
 
 static int state = 0;
-static float alpha = 1.0f;
-static float scale = 1.0f;
-static float fadeSpeed = 1.0f;
+
+static float scale = 0.0f;
+static float fadeSpeed = 0.0f;
 
 static Image cin_image;
 static Texture2D texture;
 
 static float visibleWidth = 0.0f;
-static float revealSpeed = 2.0f;
+static float revealSpeed = 0.0f;
 
 void InitLogoCINScreen(void) {
     finishScreen = 0;
     framesCounter = 0;
 
-    logoPositionX = GetScreenWidth() / 16;
-    logoPositionY = GetScreenHeight() / 4;
-
     widthLogo = 0;
     heightLogo = 0;
 
     state = 0;
-    alpha = 1.0f;
     scale = 0.2f;
-    fadeSpeed = 0.001f;
 
     visibleWidth = 0.0f;
     revealSpeed = 3.0f;
@@ -48,7 +40,7 @@ void UpdateLogoCINScreen(void) {
     if (state == 0) {
         framesCounter++;
 
-        if (visibleWidth < texture.width / 3) {
+        if (visibleWidth < (float) texture.width / 3) {
             visibleWidth += revealSpeed;
         }
         else {

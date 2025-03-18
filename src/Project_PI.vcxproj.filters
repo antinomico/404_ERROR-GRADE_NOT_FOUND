@@ -21,6 +21,9 @@
     <ClCompile Include="screen_logo_cin.c">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="screen_logo_rl.c">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\assets\HC.png">

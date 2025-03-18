@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="name_game.c" />
     <ClCompile Include="screen_logo_cin.c" />
+    <ClCompile Include="screen_logo_rl.c" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\assets\HC.png" />

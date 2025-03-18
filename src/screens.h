@@ -55,10 +55,10 @@ extern "C" {            // Prevents name mangling of functions
 // Logo Raylib Screen Functions Declaration
 //----------------------------------------------------------------------------------
 void InitLogoRLScreen(void);
-void UpdateLogoScreen(void);
-void DrawLogoScreen(void);
-void UnloadLogoScreen(void);
-int FinishLogoScreen(void);
+void UpdateLogoRLScreen(void);
+void DrawLogoRLScreen(void);
+void UnloadLogoRLScreen(void);
+int FinishLogoRLScreen(void);
 
 //----------------------------------------------------------------------------------
 // Logo CIn Screen Functions Declaration
