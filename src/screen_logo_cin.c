@@ -11,6 +11,7 @@ static int state = 0;
 
 static float scale = 0.0f;
 static float fadeSpeed = 0.0f;
+static float alpha = 0.0f;
 
 static Image cin_image;
 static Texture2D texture;
@@ -27,9 +28,10 @@ void InitLogoCINScreen(void) {
 
     state = 0;
     scale = 0.2f;
+    alpha = 0.0f;
 
     visibleWidth = 0.0f;
-    revealSpeed = 3.0f;
+    revealSpeed = 2.0f;
 
     cin_image = LoadImage("rsc\\HC.png");
     ImageResize(&cin_image, scale * cin_image.width, scale * cin_image.height);
@@ -38,22 +40,25 @@ void InitLogoCINScreen(void) {
 
 void UpdateLogoCINScreen(void) {
     if (state == 0) {
-        framesCounter++;
 
         if (visibleWidth < (float) texture.width / 3) {
             visibleWidth += revealSpeed;
         }
-        else {
+        else
             state = 1;
-            framesCounter = 0;
-        }
-    }
+	}
     else if (state == 1) {
         framesCounter++;
-        
-        if (framesCounter == 5 * GetFPS())
-            finishScreen = 1;
+
+        if (framesCounter == 2 * GetFPS())
+            state = 2;
     }
+	else if (state == 2) {
+        alpha += 0.01f;
+
+        if (alpha >= 1.0f)
+			finishScreen = 1;
+	}
 }
 
 void DrawLogoCINScreen(void) {
@@ -67,7 +72,7 @@ void DrawLogoCINScreen(void) {
             (Vector2) {
             (GetScreenWidth() - texture.width) / 2, (GetScreenHeight() - texture.height) / 2
         },
-            WHITE
+            RAYWHITE
         );
     }
     else if (state == 1) {
@@ -79,7 +84,24 @@ void DrawLogoCINScreen(void) {
             (Vector2) {
             (GetScreenWidth() - texture.width) / 2, (GetScreenHeight() - texture.height) / 2
         },
-            WHITE
+            RAYWHITE
+        );
+    }
+    else if (state == 2) {
+        DrawTextureRec(
+            texture,
+            (Rectangle) {
+            0, 0, texture.width, texture.height
+        },
+            (Vector2) {
+            (GetScreenWidth() - texture.width) / 2, (GetScreenHeight() - texture.height) / 2
+        },
+            RAYWHITE
+        );
+
+        DrawRectangle(
+            0, 0, GetScreenWidth(), GetScreenHeight(),
+            Fade(RAYWHITE, alpha)
         );
     }
 }

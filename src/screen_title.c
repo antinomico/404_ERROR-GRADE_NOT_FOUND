@@ -1,28 +1,3 @@
-/**********************************************************************************************
-*
-*   raylib - Advance Game template
-*
-*   Title Screen Functions Definitions (Init, Update, Draw, Unload)
-*
-*   Copyright (c) 2014-2022 Ramon Santamaria (@raysan5)
-*
-*   This software is provided "as-is", without any express or implied warranty. In no event
-*   will the authors be held liable for any damages arising from the use of this software.
-*
-*   Permission is granted to anyone to use this software for any purpose, including commercial
-*   applications, and to alter it and redistribute it freely, subject to the following restrictions:
-*
-*     1. The origin of this software must not be misrepresented; you must not claim that you
-*     wrote the original software. If you use this software in a product, an acknowledgment
-*     in the product documentation would be appreciated but is not required.
-*
-*     2. Altered source versions must be plainly marked as such, and must not be misrepresented
-*     as being the original software.
-*
-*     3. This notice may not be removed or altered from any source distribution.
-*
-**********************************************************************************************/
-
 #include "raylib.h"
 #include "screens.h"
 
@@ -32,6 +7,19 @@
 static int framesCounter = 0;
 static int finishScreen = 0;
 
+static int index_select = 0;
+
+static int state = 0;
+
+static int size_ref_options = 0;
+
+static int option_width = 0;
+static int option_height = 0;
+
+static int screen_select[3] = { 0, 0, 0 };
+
+static Vector2 pos_title = { 0, 0 };
+
 //----------------------------------------------------------------------------------
 // Title Screen Functions Definition
 //----------------------------------------------------------------------------------
@@ -39,39 +27,88 @@ static int finishScreen = 0;
 // Title Screen Initialization logic
 void InitTitleScreen(void)
 {
-    // TODO: Initialize TITLE screen variables here!
     framesCounter = 0;
     finishScreen = 0;
+
+	index_select = 0;
+
+    state = 0;
+
+    size_ref_options = 80;
+
+    option_width = 200;
+    option_height = 70;
+
+	screen_select[0] = GAMEPLAY;
+	screen_select[1] = OPTIONS;
+	screen_select[2] = ENDING;
+	//screen_select[3] = EXIT;
+
+    static Vector2 pos_title = { 10, 20 };
 }
 
 // Title Screen Update logic
 void UpdateTitleScreen(void)
 {
-    // TODO: Update TITLE screen variables here!
+    if (state == 0) {
+        if (IsKeyPressed(KEY_UP) || IsKeyPressed(KEY_LEFT)) {
+            //som
+            index_select = (index_select - 1 + 3) % 3;
+        }
+        else if (IsKeyPressed(KEY_DOWN) || IsKeyPressed(KEY_RIGHT)) {
+            //som
+            index_select = (index_select + 1) % 3;
+        }
 
-    // Press enter or tap to change to GAMEPLAY screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
-        //finishScreen = 1;   // OPTIONS
-        finishScreen = 2;   // GAMEPLAY
-        PlaySound(fxCoin);
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            PlaySound(fxCoin);
+            state = 1;
+        }
+    }
+    else if (state == 1) {
+		framesCounter++;
+
+		if (framesCounter == 3 * GetFPS())
+            finishScreen = index_select;
     }
 }
 
 // Title Screen Draw logic
 void DrawTitleScreen(void)
 {
-    // TODO: Draw TITLE screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
-    Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "TITLE SCREEN", pos, font.baseSize*3.0f, 4, DARKGREEN);
-    DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
+    //DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
+    //DrawTextEx(font, "GAME CRAZY", (Vector2) { GetScreenWidth() / 2, 50 }, font.baseSize * 3.0f, 4, DARKGREEN);
+    
+    if (state == 0) {
+        for (int i = 0; i < 3; i++) {
+            if (i == index_select) {
+                DrawRectangle(GetScreenWidth() / 2 - option_width / 2, GetScreenHeight() / 2 - option_height / 2 + i * size_ref_options, option_width, option_height, RED);
+            }
+            else {
+                DrawRectangle(GetScreenWidth() / 2 - option_width / 2, GetScreenHeight() / 2 - option_height / 2 + i * size_ref_options, option_width, option_height, BLUE);
+            }
+        }
+    }
+    else if (state == 1) {
+        for (int i = 0; i < 3; i++) {
+            if (i == index_select) {
+                DrawRectangle(GetScreenWidth() / 2 - option_width / 2, GetScreenHeight() / 2 - option_height / 2 + i * size_ref_options, option_width, option_height, YELLOW);
+            }
+            else {
+                DrawRectangle(GetScreenWidth() / 2 - option_width / 2, GetScreenHeight() / 2 - option_height / 2 + i * size_ref_options, option_width, option_height, BLUE);
+            }
+        }
+    }
+
+
+    DrawText("GAME CRAZY", GetScreenWidth() / 2 - 50, 50, 20, DARKGREEN);
 }
 
 // Title Screen Unload logic
 void UnloadTitleScreen(void)
 {
-    // TODO: Unload TITLE screen variables here!
+
 }
 
 // Title Screen should finish?

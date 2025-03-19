@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="name_game.c" />
+    <ClCompile Include="player.c" />
     <ClCompile Include="screen_ending.c" />
     <ClCompile Include="screen_gameplay.c" />
     <ClCompile Include="screen_logo_cin.c" />
