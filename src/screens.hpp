@@ -12,7 +12,7 @@ typedef enum GameScreen {
     OPTIONS = 3,
     GAMEPLAY = 4,
     ENDING = 5
-};
+}   GamesScreen;
 
 // variáveis globais (compartilhadas entre as telas)
 extern GameScreen currentScreen;
@@ -25,6 +25,7 @@ class LogoRLScreen {
     public:
         LogoRLScreen();
 		~LogoRLScreen();
+        
         void Init();
         void Update();
         void Draw();
@@ -54,6 +55,7 @@ class LogoCINScreen {
     public:
 		LogoCINScreen();
 		~LogoCINScreen();
+        
         void Init();
         void Update();
         void Draw();
@@ -85,6 +87,7 @@ class TitleScreen {
     public:
 		TitleScreen();
 		~TitleScreen();
+        
         void Init();
         void Update();
         void Draw();
@@ -114,6 +117,7 @@ class OptionsScreen {
     public:
 		OptionsScreen();
 		~OptionsScreen();
+        
         void Init();
         void Update();
         void Draw();
@@ -130,6 +134,7 @@ class GameplayScreen {
     public:
 		GameplayScreen();
 		~GameplayScreen();
+        
         void Init();
         void Update();
         void Draw();
@@ -146,6 +151,7 @@ class EndingScreen {
     public:
 		EndingScreen();
 		~EndingScreen();
+        
         void Init();
         void Update();
         void Draw();

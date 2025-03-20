@@ -23,7 +23,7 @@ static int transFromScreen = -1;
 static GameScreen transToScreen = UNKNOWN;
 
 static void ChangeToScreen(GameScreen screen);
-static void TransitionToScreen(int screen);
+static void TransitionToScreen(GameScreen screen);
 static void UpdateTransition(void);
 static void DrawTransition(void);
 static void UpdateDrawFrame(void);
@@ -74,7 +74,6 @@ static void ChangeToScreen(GameScreen screen) {
         default: break;
     }
 
-    // Init next screen
     switch (screen) {
         case LOGO_RL: logoScreenRL.Init(); break;
         case LOGO_CIN: logoScreenCIN.Init(); break;
@@ -88,11 +87,11 @@ static void ChangeToScreen(GameScreen screen) {
     currentScreen = screen;
 }
 
-static void TransitionToScreen(int screen) {
+static void TransitionToScreen(GameScreen screen) {
     onTransition = true;
     transFadeOut = false;
     transFromScreen = currentScreen;
-    transToScreen = static_cast<GameScreen>(screen);
+    transToScreen = screen;
     transAlpha = 0.0f;
 }
 
@@ -103,7 +102,6 @@ static void UpdateTransition(void) {
         if (transAlpha > 1.01f) {
             transAlpha = 1.0f;
 
-            // Unload current screen
             switch (transFromScreen) {
                 case LOGO_RL: logoScreenRL.Unload(); break;
                 case LOGO_CIN: logoScreenCIN.Unload(); break;
@@ -114,7 +112,6 @@ static void UpdateTransition(void) {
                 default: break;
             }
 
-            // Load next screen
             switch (transToScreen) {
                 case LOGO_RL: logoScreenRL.Init(); break;
                 case LOGO_CIN: logoScreenCIN.Init(); break;
@@ -147,7 +144,6 @@ static void DrawTransition(void) {
 }
 
 static void UpdateDrawFrame(void) {
-    // Update
     if (!onTransition) {
         switch (currentScreen) {
             case LOGO_RL:
@@ -178,24 +174,22 @@ static void UpdateDrawFrame(void) {
 
             case GAMEPLAY:
                 gameplayScreen.Update();
-                if (gameplayScreen.Finish() == 1)
+                if (gameplayScreen.Finish())
                     TransitionToScreen(ENDING);
                 break;
 
             case ENDING:
                 endingScreen.Update();
-                if (endingScreen.Finish() == 1)
+                if (endingScreen.Finish())
                     TransitionToScreen(TITLE);
                 break;
 
             default: break;
         }
     }
-    else {
+    else
         UpdateTransition();
-    }
 
-    // Draw
     BeginDrawing();
 
     ClearBackground(RAYWHITE);
