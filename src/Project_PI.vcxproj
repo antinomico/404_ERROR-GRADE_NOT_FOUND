@@ -130,20 +130,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="name_game.c" />
-    <ClCompile Include="player.c" />
-    <ClCompile Include="screen_ending.c" />
-    <ClCompile Include="screen_gameplay.c" />
-    <ClCompile Include="screen_logo_cin.c" />
-    <ClCompile Include="screen_logo_rl.c" />
-    <ClCompile Include="screen_options.c" />
-    <ClCompile Include="screen_title.c" />
+    <ClCompile Include="cin_souls.cpp" />
+    <ClCompile Include="screen_ending.cpp" />
+    <ClCompile Include="screen_gameplay.cpp" />
+    <ClCompile Include="screen_logo_cin.cpp" />
+    <ClCompile Include="screen_logo_rl.cpp" />
+    <ClCompile Include="screen_options.cpp" />
+    <ClCompile Include="screen_title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\assets\HC.png" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="screens.h" />
+    <ClInclude Include="screens.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
