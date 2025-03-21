@@ -5,7 +5,7 @@ public:
 	float posInitialX;
 	float posInitialY;
 
-	Vector2 center = { (GetScreenWidth() - (GetScreenWidth() - posInitialX), GetScreenHeight() - (GetScreenHeight() - posInitialY) };
+	Vector2 center = { (GetScreenWidth() - (GetScreenWidth() - posInitialX), GetScreenHeight() - (GetScreenHeight() - posInitialY)) };
 ;
 
 	void movimentacaoBoss() {
