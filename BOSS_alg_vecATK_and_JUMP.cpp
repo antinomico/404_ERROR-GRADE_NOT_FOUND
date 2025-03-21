@@ -13,6 +13,8 @@
 
 #define ATK_COOLDOWN_vec 1
 
+#define blink_cooldown 3
+
 //-----------------------------------------------------------//
 
 struct coords
@@ -73,6 +75,11 @@ int dash_t;
 int ATK1_COOLDOWNt;
 int it;
 
+float frog_should_blink;
+float blink_cooldownt;
+
+Texture2D frog[7];
+
 //-----------------------------------------------------------//
 
 void init()
@@ -95,6 +102,17 @@ void init()
     S.posicao_inicial = S.posicao;
     S.acompanhar_cd_antes_da_linguada == S.cooldown_antes_da_linguada;
     S.linguadas_restantes = S.quantidade_de_linguadas;
+
+    //criando e setando o vetor com os sprites da animação do sapo:
+    frog_should_blink = 0;
+    blink_cooldownt = 0;
+    frog[0] = LoadTexture("frog back.png");
+    frog[1] = LoadTexture("frog_front.png");
+    frog[2] = LoadTexture("frog left.png");
+    frog[3] = LoadTexture("frog right.png");
+    frog[4] = LoadTexture("frog front (blink).png");
+    frog[5] = LoadTexture("frog left (blink).png");
+    frog[6] = LoadTexture("frog right (blink).png");
 }
 
 //-----------------------------------------------------------//
@@ -148,7 +166,7 @@ void vectoratk()
 {
     float dx = vec.dex - S.posicao.x;
     float dy = vec.dey - S.posicao.y;
-    DrawLine(S.posicao.x, S.posicao.y, vec.cx, vec.cy, YELLOW);
+    DrawLine(S.posicao.x, S.posicao.y, vec.cx, vec.cy, RED);
     if (vec.reverse == 0)
     {
         float mod = 0.01 * sqrt(dx * dx + dy * dy);
@@ -313,6 +331,44 @@ void acompanhar_cd() {
     }
 }
 
+int Sapo_txtIndex(float controle_de_tempo)
+{
+    float dx = S.posicao.x - P.posicao.x;
+    float dy = S.posicao.y - P.posicao.y;
+    //se dx > 0, o x do player é menor que o do sapo (player está na esquerda), caso contrario, player está na direita.
+    //se dy > 0, o player está acima do sapo, caso contrário, o player está abaixo
+
+    blink_cooldownt += controle_de_tempo;
+    printf("%f\n", blink_cooldownt);
+    if (blink_cooldownt >= blink_cooldown)
+    {
+        frog_should_blink = 1;
+        blink_cooldownt = 0;
+    }
+    if (frog_should_blink > 0)
+    {
+        frog_should_blink++;
+        if (frog_should_blink > 15) frog_should_blink = 0;
+    }
+
+    if (fabs(dx) > fabs(dy))
+    {
+        if (dx > 0 && frog_should_blink == 0)       return 2;
+        else if (dx < 0 && frog_should_blink == 0)  return 3;
+        else if (dx > 0 && frog_should_blink > 0)   return 5;
+        else if (dx < 0 && frog_should_blink > 0)   return 6;
+        else return 1;
+    }
+    else
+    {
+        if (dy > 0 && frog_should_blink == 0)       return 0;
+        else if (dy < 0 && frog_should_blink == 0)  return 1;
+        else if (dy > 0 && frog_should_blink > 0)   return 0;
+        else if (dy < 0 && frog_should_blink > 0)   return 4;
+        else return 1;
+    }
+}
+
 //-----------------------------------------------------------//
 
 int main() {
@@ -331,7 +387,8 @@ int main() {
         //
         ClearBackground(BLACK);
         DrawCircle(P.posicao.x, P.posicao.y, P.raio_do_player, BLUE);
-        DrawCircle(S.posicao.x, S.posicao.y, S.raio_do_sapo, RED);
+        int index = Sapo_txtIndex(controle_de_tempo);
+        DrawTexture(frog[index], S.posicao.x, S.posicao.y, WHITE);
 
         acompanhar_cd();
 
