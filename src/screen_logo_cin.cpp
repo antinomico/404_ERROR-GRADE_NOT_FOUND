@@ -10,7 +10,7 @@ LogoCINScreen::LogoCINScreen() :
 }
 
 LogoCINScreen::~LogoCINScreen() {
-    Unload();
+    //Unload();
 }
 
 void LogoCINScreen::Init() {
@@ -28,7 +28,7 @@ void LogoCINScreen::Init() {
     revealSpeed = 2.0f;
 
     cin_image = LoadImage("rsc\\HC.png");
-    ImageResize(&cin_image, (int) scale * cin_image.width, (int) scale * cin_image.height);
+    ImageResize(&cin_image, scale * cin_image.width, scale * cin_image.height);
     texture = LoadTextureFromImage(cin_image);
 }
 
@@ -83,8 +83,8 @@ void LogoCINScreen::Draw() {
 }
 
 void LogoCINScreen::Unload() {
-    UnloadTexture(texture);
     UnloadImage(cin_image);
+    UnloadTexture(texture);
 }
 
 bool LogoCINScreen::Finish() const {

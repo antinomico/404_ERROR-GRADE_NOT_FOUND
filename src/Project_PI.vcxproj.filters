@@ -15,30 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="name_game.c">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="screen_logo_cin.c">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="screen_logo_rl.c">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="screen_ending.c">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="screen_gameplay.c">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="screen_options.c">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="screen_title.c">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="player.c">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="screen_logo_rl.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
@@ -57,7 +33,10 @@
     <ClCompile Include="screen_ending.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="cin_souls.cpp">
+    <ClCompile Include="game_title.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,13 +44,21 @@
     <Image Include="..\assets\HC.png">
       <Filter>Arquivos de Recurso</Filter>
     </Image>
+    <Image Include="rsc\mecha.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="screens.h">
-      <Filter>Arquivos de Cabeçalho</Filter>
-    </ClInclude>
     <ClInclude Include="screens.hpp">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
+    <ClInclude Include="gameplay.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Media Include="rsc\coin.wav">
+      <Filter>Arquivos de Recurso</Filter>
+    </Media>
   </ItemGroup>
 </Project>

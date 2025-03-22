@@ -32,9 +32,9 @@ int main(void) {
     InitWindow(screenWidth, screenHeight, "Project PI");
 
     // Load global data (assets that must be available in all screens, i.e. font)
-    //font = LoadFont("resources/mecha.png");
+    font = LoadFont("rsc/mecha.png");
     //music = LoadMusicStream("resources/ambient.ogg");
-    //fxCoin = LoadSound("resources/coin.wav");
+    fxCoin = LoadSound("rsc/coin.wav");
 
     //SetMusicVolume(music, 1.0f);
     //PlayMusicStream(music);
@@ -54,9 +54,9 @@ int main(void) {
 #endif
 
     // Unload global data loaded
-    //UnloadFont(font);
+    UnloadFont(font);
     //UnloadMusicStream(music);
-    //UnloadSound(fxCoin);
+    UnloadSound(fxCoin);
 
     CloseWindow();
     return 0;
@@ -160,10 +160,10 @@ static void UpdateDrawFrame(void) {
 
             case TITLE:
                 titleScreen.Update();
-                if (titleScreen.Finish() == 1)
-                    TransitionToScreen(OPTIONS);
-                else if (titleScreen.Finish() == 2)
+                if (titleScreen.Finish() == GAMEPLAY)
                     TransitionToScreen(GAMEPLAY);
+                else if (titleScreen.Finish() == OPTIONS)
+                    TransitionToScreen(OPTIONS);
                 break;
 
             case OPTIONS:
@@ -206,6 +206,6 @@ static void UpdateDrawFrame(void) {
 
     if (onTransition)
         DrawTransition();
-
+    
     EndDrawing();
 }

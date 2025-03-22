@@ -12,7 +12,7 @@ typedef enum GameScreen {
     OPTIONS = 3,
     GAMEPLAY = 4,
     ENDING = 5
-}   GamesScreen;
+};
 
 // variáveis globais (compartilhadas entre as telas)
 extern GameScreen currentScreen;
@@ -96,7 +96,7 @@ class TitleScreen {
 
     private:
         int framesCounter;
-        bool finishScreen;
+        int finishScreen;
 
         int index_select;
 
