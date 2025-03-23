@@ -22,6 +22,7 @@ struct coords {
 
 struct Player {
     coords posicao;
+    coords sword; //armazena os dx e dy da espada
     float raio_do_player = 20.0f;
     int vida_jogador = 100;
 
@@ -112,11 +113,13 @@ void init()
 
 void movement()
 {
-    if (dash_t > 10) dash_t++;				                //timer do dash, ele é empregado de modo que o jogador não possa ficar usando o dash indefinidamente
+     if (dash_t > 10) dash_t++;				                //timer do dash, ele é empregado de modo que o jogador não possa ficar usando o dash indefinidamente
     if (dash_t >= 150) dash_t = 0;			                //se o dash_timer for maior que o intervalo de tempo de espera, resete ele, o jogador pode usar o dash 
 
     if (IsKeyDown(KEY_W))
-    {
+    {   			    
+	P.sword.y = -5;
+	P.sword.x = 0;
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))		//dash timer <= 50 é para que o dash seja perceptível e suave para o jogador.
         {
             if ((P.posicao.y - P.raio_do_player - 20) < 50) P.posicao.y = 50 + P.raio_do_player;
@@ -130,7 +133,9 @@ void movement()
     }
 
     if (IsKeyDown(KEY_A))
-    {
+    {   
+	if (!IsKeyDown(KEY_W) && !IsKeyDown(KEY_S)) P.sword.y = 0;     
+	P.sword.x = -5;    
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))		//dash timer <= 50 é para que o dash seja perceptível e suave para o jogador.
         {
             if ((P.posicao.x - P.raio_do_player - 20) < 0) P.posicao.x = P.raio_do_player;
@@ -140,11 +145,13 @@ void movement()
             dash_t++;
         }
 
-        else if ((P.posicao.x - P.raio_do_player - 4) > 0) P.posicao.x -= 4;;
+        else if ((P.posicao.x - P.raio_do_player - 4) > 0) P.posicao.x -= 4;
     }
 
     if (IsKeyDown(KEY_S))
-    {
+    {   
+	if (!IsKeyDown(KEY_A) && !IsKeyDown(KEY_D)) P.sword.x = 0; 
+	P.sword.y = 5;    
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))		//dash timer <= 50 é para que o dash seja perceptível e suave para o jogador.
         {
             if ((Vres - P.posicao.y - P.raio_do_player) < 20) P.posicao.y += (Vres - P.posicao.y - P.raio_do_player);
@@ -158,7 +165,9 @@ void movement()
     }
 
     if (IsKeyDown(KEY_D))
-    {
+    {    
+	if (!IsKeyDown(KEY_W) && !IsKeyDown(KEY_S)) P.sword.y = 0;      
+	P.sword.x = 5;    
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))		//dash timer <= 50 é para que o dash seja perceptível e suave para o jogador.
         {
             if ((Hres - P.posicao.x - P.raio_do_player) < 20) P.posicao.x += (Hres - P.posicao.x - P.raio_do_player);
@@ -170,9 +179,10 @@ void movement()
 
         else if ((P.posicao.x + P.raio_do_player + 4) < Hres) P.posicao.x += 4;
     }
+    DrawCircle(P.posicao.x + 6*P.sword.x, P.posicao.y + 6*P.sword.y, 5, RED);
 }
 
-//-----------------------------------------------------------//
+//------------------------------------:-----------------------//
 
 void vectoratk()
 {
@@ -438,6 +448,21 @@ void acompanhar_cd() {
     }
 }
 
+
+//-----------------------------------------------------------//
+
+void sword_hitbox_check()
+{
+	float at_x = P.posicao.x + 6*P.sword.x;
+	float at_y = P.posicao.y + 6*P.sword.y;
+	//var1: (S.posicao.x - at_x)² + (S.posicao.y - at_y)²
+	if (IsKeyDown(KEY_P) && (S.posicao.x - at_x)*(S.posicao.x - at_x) + (S.posicao.y - at_y)*(S.posicao.y - at_y) <= S.raio_do_sapo*S.raio_do_sapo) S.vida_boss--;
+	//detalhe: aqui ele ataca segurando, ou seja, nn tem cooldown para o ataque da espada. Além disso, também ta faltando fazer a hitbox real da espada
+	//pq sejamos francos, ela ser um único ponto é mt paia, além de implementar o cooldown, tirando isso ta basicamente pronto ja
+	//ah sim, ele ataca no P, se quiser mudar pode mudar, so mudar a key
+	//vou andar de bike agr vlw
+}
+
 //-----------------------------------------------------------//
 
 int main() {
@@ -451,6 +476,7 @@ int main() {
 
         ataques_sapo(controle_de_tempo);
         movement();
+	sword_hitbox_check();
 
         BeginDrawing();
         //
@@ -474,3 +500,4 @@ int main() {
 
     return 0;
 }
+
