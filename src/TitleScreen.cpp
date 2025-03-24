@@ -53,7 +53,7 @@ void TitleScreen::Update() {
     else if (state == 1) {
         framesCounter++;
 
-        if (framesCounter == 3 * GetFPS()) {
+        if (framesCounter == 2 * GetFPS()) {
             finishScreen = screen_select[index_select];
         }
     }

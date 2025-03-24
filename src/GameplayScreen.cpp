@@ -1,5 +1,7 @@
 #include "raylib.h"
 #include "screens.hpp"
+#include "animation.hpp"
+#include "gameplay.hpp"
 
 GameplayScreen::GameplayScreen() :
     framesCounter(0), finishScreen(0) {
@@ -12,6 +14,7 @@ GameplayScreen::~GameplayScreen() {
 void GameplayScreen::Init() {
     framesCounter = 0;
     finishScreen = 0;
+	Player player({ 400, 225 }, 100.0f, 5.0f, 20.0f, WHITE, Animation("rsc/player_idle.png", 4, 0.1f, 0.2f), Animation("rsc/player_run.png", 4, 0.1f, 0.2f), Animation("rsc/player_dash.png", 4, 0.1f, 0.2f), Animation("rsc/player_attack.png", 4, 0.1f, 0.2f), Animation("rsc/player_die.png", 4, 0.1f, 0.2f));
 }
 
 void GameplayScreen::Update() {

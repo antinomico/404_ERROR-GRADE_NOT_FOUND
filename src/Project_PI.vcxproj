@@ -130,20 +130,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="game_title.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="screen_ending.cpp" />
-    <ClCompile Include="screen_gameplay.cpp" />
-    <ClCompile Include="screen_logo_cin.cpp" />
-    <ClCompile Include="screen_logo_rl.cpp" />
-    <ClCompile Include="screen_options.cpp" />
-    <ClCompile Include="screen_title.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="EndingScreen.cpp" />
+    <ClCompile Include="GameplayScreen.cpp" />
+    <ClCompile Include="LogoCINScreen.cpp" />
+    <ClCompile Include="LogoRLScreen.cpp" />
+    <ClCompile Include="OptionsScreen.cpp" />
+    <ClCompile Include="TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\assets\HC.png" />
+    <Image Include="..\assets\cin_logo.png" />
     <Image Include="rsc\mecha.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="animation.hpp" />
     <ClInclude Include="gameplay.hpp" />
     <ClInclude Include="screens.hpp" />
   </ItemGroup>

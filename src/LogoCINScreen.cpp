@@ -27,7 +27,7 @@ void LogoCINScreen::Init() {
     visibleWidth = 0.0f;
     revealSpeed = 2.0f;
 
-    cin_image = LoadImage("rsc\\HC.png");
+    cin_image = LoadImage("rsc\\cin_logo.png");
     ImageResize(&cin_image, scale * cin_image.width, scale * cin_image.height);
     texture = LoadTextureFromImage(cin_image);
 }
