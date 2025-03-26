@@ -7,7 +7,6 @@
 #define Hres 1080
 #define Vres 720
 
-
 Image background_SD_img;
 Texture2D background_SD;
 Image mesas_SD_img;
