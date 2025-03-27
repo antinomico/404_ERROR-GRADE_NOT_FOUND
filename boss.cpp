@@ -8,7 +8,7 @@
 BossSD::BossSD() {
 	positionSD.x = Hres / 2 - 25;
 	positionSD.y = 200;
-	//spriteBoss = LoadTexture("");
+	//spriteBoss = LoadTexture(""); // 
 }
 
 BossSD::~BossSD() {
@@ -16,7 +16,7 @@ BossSD::~BossSD() {
 }
 
 void BossSD::DrawSD() {
-    
+    DrawRectangle(585, 148, 50, 50, BLUE);
 	//DrawTexture(spriteBoss, 0, 0, WHITE);
 }
 
