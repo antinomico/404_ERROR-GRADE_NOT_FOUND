@@ -1,5 +1,7 @@
 #include "raylib.h"
 #include "boss.hpp"
+#include "mesaHW.hpp"
+#include "player.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -16,191 +18,21 @@ Texture2D mesaJailson;
 
 float angle_deg = 24.9547f;
 
-class Player {
-public:
-	float x, y;
-	float largura = 47;
-	float altura = 126;
-	float speed = 5;
-	float speed_dash = 10;
-	int dash_t;
-	Texture2D playerUP;
-	Texture2D playerDOWN;
-	Texture2D playerRIGHT;
-	Texture2D playerLEFT;
-	Texture2D playerNOW;
-	Image playerUP_img;
-	Image playerDOWN_img;
-	Image playerRIGHT_img;
-	Image playerLEFT_img;
-
-	// Desenhar player (por enquanto um círculo)
-	void DrawPlayer() {
-		DrawTexture(playerNOW, x, y, WHITE);
-	}
-	
-	// Colisao com mesas
-	bool ColissionWithQuad(Vector2 a, Vector2 b, Vector2 c, Vector2 d, Vector2 pos) {
-		if (pos.x >= a.x && pos.x >= c.x && pos.x <= b.x && pos.x <= d.x) {
-			if (pos.y >= a.y && pos.y >= b.y && pos.y <= c.y && pos.y <= d.y) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	bool CollisionMesas() {
-		if (ColissionWithQuad())  // Mesa 1
-			
-		return true; 
-		return false;
-	}
-	
-	// Atualizar posição do player
-	void UpdatePlayer() {
-
-		float qtdMovX = 0;
-		float qtdMovY = 0;
-
-		Vector2 dir = { sin(angle_deg * DEG2RAD), -1.0f * cos(angle_deg * DEG2RAD) };
-
-		if (dash_t > 10) dash_t++;	// Se o timer do dash for maior que 10, o player terá que esperar o timer chegar a 150 para poder usá-lo de novo			                
-		if (dash_t >= 150) dash_t = 0; // Reset do timer do dash		              
-
-		if (IsKeyDown(KEY_W)) {
-			playerNOW = playerUP;
-			if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
-				y += speed_dash * dir.y;				
-				x += speed_dash * dir.x;
-				qtdMovX += speed_dash * dir.x;
-				qtdMovY += speed_dash * dir.y;
-				dash_t++;
-			}
-			else {
-				y += dir.y * speed; 
-				x += dir.x * speed;
-				qtdMovX += speed * dir.x;
-				qtdMovY += speed * dir.y;
-			}
-		}
-
-		if (IsKeyDown(KEY_A)) {
-			playerNOW = playerLEFT;
-			if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))	
-			{
-				x -= speed_dash;
-				qtdMovX -= speed_dash;
-				dash_t++;
-			}
-			else x -= speed;
-			qtdMovX -= speed;
-		}
-
-		if (IsKeyDown(KEY_S)) {
-			playerNOW = playerDOWN;
-			if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))	
-			{
-				y -= dir.y * speed_dash;
-				x -= dir.x * speed_dash;
-				dash_t++;
-				qtdMovX -= speed_dash * dir.x;
-				qtdMovY -= speed_dash * dir.y;
-			}
-			else {
-				y -= dir.y * speed; 
-				x -= dir.x * speed;
-				qtdMovX -= speed * dir.x;
-				qtdMovY -= speed * dir.y;
-			}
-		}
-
-		if (IsKeyDown(KEY_D)) {
-			playerNOW = playerRIGHT;
-			if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
-				x += speed_dash;
-				qtdMovX += speed_dash;
-				dash_t++;
-			}
-			else {
-				x += speed;
-				qtdMovX += speed;
-			}
-		}
-
-		// Colisões com as bordas
-		if (x <= 0) {
-			x = 0;
-		}
-		if (x >= Hres - largura) {
-			x = Hres - largura;
-		}
-		if (y <= 0) {
-			y = 0;
-		}
-		if (y >= Vres - altura) {
-			y = Vres - altura;
-		}
-
-		// Colisões com a parede da frente
-		if (y + 100 <= ((6 * x) + 51542) / 433) {
-			y = (((6 * x) / 433) + (51542 / 433)) - 100;
-		}
-
-		// Colisões com a parede lateral
-		if (x <= (66646 - (106 * (y+100))) / 251) {
-			x = (66646 - (106 * (y+100))) / 251;
-		}
-
-		// Colisoes com as mesas
-		if (CollisionMesas()) {
-			x -= qtdMovX;
-			y -= qtdMovY;
-		}
-		
-	}
-};
-
-class MesaHW {
-public:
-	float x, y;
-	Image img = LoadImage("assets/mesaHW.png");
-	Texture2D texture;
-	Vector2 a1, b1, c1, d1;
-
-	MesaHW(Vector2 ta) {
-		a1 = ta;
-		GerarParalelogramo(a1, b1, c1, d1);
-	}
-
-	void GerarParalelogramo(Vector2 a, Vector2 &b, Vector2 &c, Vector2 &d) {
-		b.x = a.x + 340;
-		b.y = a.y;
-	
-		c.x = 32 / tan(angle_deg * DEG2RAD) + a.x;
-		c.y = a.y + 32;
-	
-		d.x = 32 / tan(angle_deg * DEG2RAD) - b.x;
-		d.y = c.y;
-	}
-};
-
 
 BossSD boss;
 Player player;
 MesaHW mesa1({180, 212}), 
 	   mesa2({133, 314}), 
 	   mesa3({83, 419}), 
-	   mesa4({35, 531}), 
-	   mesa5, 
-	   mesa6,
-	   mesa7;
-	   
+	   mesa4({35, 531}); 
+ 
 
 void init() {
 
 	player.x = Hres / 2;
 	player.y = Vres / 2;
 	player.dash_t = 0;
+ 
 
 	// Background
 	background_SD_img = LoadImage("assets/backSD.png");
@@ -254,6 +86,7 @@ void init() {
 	mesa4.x = 726;
 	mesa4.y = 168;
 
+	/*
 	mesa5.texture = LoadTextureFromImage(mesa1.img);
 	mesa5.texture.width *= 2;
 	mesa5.texture.height *= 2;
@@ -271,20 +104,22 @@ void init() {
 	mesa7.texture.height *= 2;
 	mesa7.x = 576;
 	mesa7.y = 492;
+
+	*/
 }
 	
+
 
 int main() {
 
 	InitWindow(Hres, Vres, "Boss SD");
 	SetTargetFPS(60);
 
-
 	init();
 
 	while (!WindowShouldClose()) {
 
-		player.UpdatePlayer();
+		player.UpdatePlayer(mesa1);
 
 		BeginDrawing();
 
@@ -295,9 +130,11 @@ int main() {
 			DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
 			DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
 			DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
+			/*
 			DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
 			DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
 			DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
+			*/
 
 			DrawTexture(mesaJailson, 0, 492, WHITE);
 
