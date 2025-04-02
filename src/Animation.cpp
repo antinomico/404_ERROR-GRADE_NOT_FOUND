@@ -2,13 +2,14 @@
 #include "animation.hpp"
 
 Animation::Animation() :
-	texture{0}, numFrames(0), frameTime(0), currentFrame(0), frameWidth(0), scale(0) {
+	texture{0}, numFrames(0), frameTime(0), currentFrame(0), frameAxis(0), frameWidth(0), scale(0) {
 }
 
 Animation::Animation(const char* fileName, int numFrames, float frameTime, float scale) :
 	numFrames(numFrames), frameTime(frameTime), scale(scale), texture{0} {
 	texture = LoadTexture(fileName);
 	currentFrame = 0;
+	frameAxis = 0;
 	frameWidth = texture.width / numFrames;
 }
 
