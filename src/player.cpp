@@ -34,8 +34,32 @@ void Player::Init() {
 	
 }
 
-// criar outro método para update do animation?
-void Player::Update() {
+void Player::PosUpdate() {
+	if (health <= 0) {
+	}
+	else {
+		if (IsKeyPressed(KEY_SPACE)) {
+		}
+		else if (IsKeyPressed(KEY_J)) {
+		}
+		else if (IsKeyDown(KEY_A)) {
+			position.x -= speed;
+		}
+		else if (IsKeyDown(KEY_D)) {
+			position.x += speed;
+		}
+		else if (IsKeyDown(KEY_W)) {
+			position.y -= speed;
+		}
+		else if (IsKeyDown(KEY_S)) {
+			position.y += speed;
+		}
+		else {
+		}
+	}
+}
+
+void Player::AnimUpdate() {
 	if (health <= 0) {
 		state = DIE;
 	}
@@ -44,23 +68,24 @@ void Player::Update() {
 			state = DASH;
 		}
 		else if (IsKeyPressed(KEY_J)) {
-			state = ATTACK;
+			if (dashAnimation.IsFinished())
+				state = ATTACK;
 		}
 		else if (IsKeyDown(KEY_A)) {
-			position.x -= speed;
-			state = RUN;
+			if (dashAnimation.IsFinished())
+				state = RUN;
 		}
 		else if (IsKeyDown(KEY_D)) {
-			position.x += speed;
-			state = RUN;
+			if (dashAnimation.IsFinished())
+				state = RUN;
 		}
 		else if (IsKeyDown(KEY_W)) {
-			position.y -= speed;
-			state = RUN;
+			if (dashAnimation.IsFinished())
+				state = RUN;
 		}
 		else if (IsKeyDown(KEY_S)) {
-			position.y += speed;
-			state = RUN;
+			if (dashAnimation.IsFinished())
+				state = RUN;
 		}
 		else {
 			state = IDLE;
@@ -71,19 +96,19 @@ void Player::Update() {
 void Player::Draw() {
 	switch (state) {
 	case IDLE:
-		idleAnimation.Draw(position);
+		idleAnimation.Draw(position, GetKeyPressed());
 		break;
 	case RUN:
-		runAnimation.Draw(position);
+		runAnimation.Draw(position, GetKeyPressed());
 		break;
 	case DASH:
-		dashAnimation.Draw(position);
+		dashAnimation.Draw(position, GetKeyPressed());
 		break;
 	case ATTACK:
-		attackAnimation.Draw(position);
+		attackAnimation.Draw(position, GetKeyPressed());
 		break;
 	case DIE:
-		dieAnimation.Draw(position);
+		dieAnimation.Draw(position, GetKeyPressed());
 		break;
 	}
 }

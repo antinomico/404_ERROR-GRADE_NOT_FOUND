@@ -10,7 +10,8 @@ class Player {
 		Player(Vector2 position, float health, float speed, float radius, Color color);
 		
 		void Init();
-		void Update();
+		void PosUpdate();
+		void AnimUpdate();
 		void Draw();
 		void Unload();
 		

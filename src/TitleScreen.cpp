@@ -22,10 +22,10 @@ void TitleScreen::Init() {
 
     state = 0;
 
-    size_ref_options = 80;
+    size_ref_options = 130;
 
-    option_width = 200;
-    option_height = 70;
+    option_width = 300;
+    option_height = 100;
 
     screen_select[0] = GAMEPLAY;
     screen_select[1] = OPTIONS;
@@ -60,6 +60,9 @@ void TitleScreen::Update() {
 }
 
 void TitleScreen::Draw() {
+	DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), SKYBLUE);
+    DrawText("CRAZY GAME", GetScreenWidth() / 2 - 150, 100, 20 * 2, DARKGREEN);
+
     if (state == 0) {
         for (int i = 0; i < 3; i++) {
             if (i == index_select) {
@@ -80,8 +83,6 @@ void TitleScreen::Draw() {
             }
         }
     }
-
-    DrawText("CRAZY GAME", GetScreenWidth() / 2 - 50, 50, 20, DARKGREEN);
 }
 
 void TitleScreen::Unload() {

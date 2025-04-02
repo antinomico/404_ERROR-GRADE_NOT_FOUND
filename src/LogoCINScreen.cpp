@@ -21,7 +21,7 @@ void LogoCINScreen::Init() {
     heightLogo = 0;
 
     state = 0;
-    scale = 0.2f;
+    scale = 0.25f;
     alpha = 0.0f;
 
     visibleWidth = 0.0f;

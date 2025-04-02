@@ -13,8 +13,8 @@ Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
 
-static const int screenWidth = 800;
-static const int screenHeight = 450;
+static const int screenWidth = 1280;
+static const int screenHeight = 720;
 
 static float transAlpha = 0.0f;
 static bool onTransition = false;
