@@ -20,8 +20,8 @@ public:
 
     void DrawPlayer();
     bool ColissionWithQuad(Vector2 a, Vector2 b, Vector2 c, Vector2 d, Vector2 pos);
-    bool CollisionMesas(MesaHW &mesa);
-    void UpdatePlayer(MesaHW &mesa);
+    bool CollisionMesas();
+    void UpdatePlayer();
     bool PointInQuad(Vector2 p, Vector2 a, Vector2 b, Vector2 c, Vector2 d);
     Image playerUP_img, playerDOWN_img, playerRIGHT_img, playerLEFT_img;
 };
