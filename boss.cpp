@@ -9,11 +9,9 @@
 BossSD::BossSD() {
 	positionSD.x = Hres / 2 - 25;
 	positionSD.y = 200;
-	fase = 0; // 0 - CHICOTADA // 1 - CHOQUE // 2 - MAPA K
+	fase = 1;
 	timer = 0;
 	timer_choque = 0;
-
-
 
 	//spriteBoss = LoadTexture("");
 }
@@ -31,8 +29,8 @@ void BossSD::DrawSD() {
 void BossSD::AtaqueSD() {
 
 	if (fase == 0) Chicotada();
-	else if (fase == 1) ChoqueMesas();
-	else if (fase == 2) MapaK();
+	else if (fase == 1) Contagem();
+	else if (fase == 5) MapaK();
 
 }
 
@@ -43,32 +41,29 @@ void BossSD::Chicotada(){
 }
 
 
-void BossSD::ChoqueMesas(){
+void BossSD::Contagem(){
 
-	
-
-	// 3 segundos
-	if (timer_choque == 0) {
-		// contagem: 3
+	if (timer_choque >= 0 && timer_choque < 60) {
+		DrawText("CHOQUE NAS MESAS EM 3", 50, 50, 30, GRAY);
 	}
 
-	else if (timer_choque == 60) {
-		// contagem: 2
+	else if (timer_choque >= 60 && timer_choque < 120) {
+		DrawText("CHOQUE NAS MESAS EM 2", 50, 50, 30, GRAY);
 	}
 
-	else if (timer_choque == 120) {
-		// contagem: 1
+	else if (timer_choque >= 120 && timer_choque < 180) {
+		DrawText("CHOQUE NAS MESAS EM 1", 50, 50, 30, GRAY);
 	}
 
-	else if (timer_choque == 180) {
-		// contagem: 0
+	else if (timer_choque >= 180 && timer_choque < 240) {
+		DrawText("CHOQUE NAS MESAS EM 0", 50, 50, 30, GRAY);
 
-		// trocar background por gif de choque
 	}
-
+	else if (timer_choque >= 240) {
+		fase = 2;
+	}
 
 	timer_choque++;
-
 }
 
 void BossSD::MapaK(){

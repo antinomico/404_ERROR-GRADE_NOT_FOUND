@@ -1,5 +1,4 @@
 #include "player.hpp"
-#include "mesaHW.hpp"
 #include <cmath>
 #include <iostream>
 
@@ -10,10 +9,12 @@
 
 
 Player::Player() {
-        largura = 47;
-        altura = 126;
-        speed = 5;
-        speed_dash = 10;
+    largura = 47;
+    altura = 126;
+    speed = 5;
+    speed_dash = 10;
+    vida = 100.0f;
+    vivo = true;
 };
 
 Player::~Player() {};
@@ -45,7 +46,7 @@ bool Player::CollisionMesas() {
 
 
 
-void Player::UpdatePlayer() {
+void Player::UpdatePlayer(int i) {
 
     frameCounter++;
 
@@ -194,7 +195,6 @@ void Player::UpdatePlayer() {
 
 
     else {
-
         if (lastPos == 0) playerNOW = playerUP;
         else if (lastPos == 1) playerNOW = playerDOWN;
         else if (lastPos == 2) playerNOW = playerLEFT;
@@ -216,7 +216,7 @@ void Player::UpdatePlayer() {
     if (x <= (66646 - (106 * (y+100))) / 251) x = (66646 - (106 * (y+100))) / 251;
 
     // Mesas
-    if (CollisionMesas()) {
+    if (CollisionMesas() && ((i == 0) || (i == 1) || (i == 2))) {
         x -= qtdMovX;
         y -= qtdMovY;
     }

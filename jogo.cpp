@@ -2,13 +2,14 @@
 #include "boss.hpp"
 #include "mesaHW.hpp"
 #include "player.hpp"
-
 #include <cmath>
 #include <iostream>
 
 #define Hres 1080
 #define Vres 720
 
+
+// VARIÁVEIS INICIAIS ============ //
 Image background_SD_img;
 Texture2D background_SD;
 Image mesas_SD_img;
@@ -18,18 +19,39 @@ Texture2D mesaJailson;
 
 float angle_deg = 24.9547f;
 
+int BackGroundCourrentFrame = 0;
+int BAckGroundFrameSpeed = 1;
+int BackGroundFramesCounter = 0;
+int BackgroundX = 0;
+int BackgroundY = 0;
+Rectangle BackgroundFrameRec = { 0.0f, 0.0f, (float)1080/2, (float)720 };
+Vector2 BackgroundPosition =  {BackgroundX, BackgroundY};
+
+Texture2D spritesheet_choque;
+Rectangle sourceRec;
+Rectangle destRec;
+int currentFrame;
+int frameCounter;
+int frameDelay;
+// =============================== //
 
 
+
+// INICIALIZAÇÃO DOS OBJETOS ======== //
 BossSD boss;
 Player player;
 MesaHW mesa1({180, 212}),
-           mesa2({133, 314}),
-           mesa3({83, 419}),
-           mesa4({35, 531}),
-           mesa5({676, 274}),
-           mesa6({626, 382}),
-           mesa7({576, 492});
-                                                                                                                                                              
+       mesa2({133, 314}),
+       mesa3({83, 419}),
+       mesa4({35, 531}),
+       mesa5({676, 274}),
+       mesa6({626, 382}),
+       mesa7({576, 492});
+// ================================= //
+    
+
+
+
 void init() {
 
         // VARIÁVEIS DO PLAYER ======== //
@@ -47,6 +69,13 @@ void init() {
         background_SD_img = LoadImage("assets/backSD.png");
         ImageResize(&background_SD_img, Hres, Vres);
         background_SD = LoadTextureFromImage(background_SD_img);
+
+        spritesheet_choque = LoadTexture("assets/backSDchoque.png");
+        sourceRec = { 0.0f, 0.0f, 540.0f, 360.0f };
+        destRec = { 0.0f, 0.0f, Hres, Vres };
+        currentFrame = 0;
+        frameCounter = 0;
+        frameDelay = 15;
         // ====================================================== //
 
 
@@ -177,32 +206,77 @@ int main() {
 
         while (!WindowShouldClose()) {
 
-                player.UpdatePlayer();
+                player.UpdatePlayer(boss.fase);
+
+                frameCounter++;
+                if (frameCounter >= frameDelay) {
+                        frameCounter = 0;
+                        currentFrame = (currentFrame + 1) % 2;
+                        sourceRec.x = (float)(currentFrame * 540.0f);
+                }
                 boss.timer++;
 
                 BeginDrawing();
 
                         ClearBackground(BLACK);
-                        DrawTexture(background_SD, 0, 0, WHITE);
 
-                        // DETERMINANDO A ORDEM COM A QUAL DEVEMOS DESENHAR O PLAYER ------ //
+                        
+
+                        // DETERMINAR BACKGROUND ====================================================== //
+                        if (boss.fase == 0 || boss.fase == 1 || boss.fase == 3) DrawTexture(background_SD, 0, 0, WHITE); // Fundo normal
+
+                        /*
+                        else if (boss.fase == 2) { // Fundo choque computadores
+                                Texture2D Background = LoadTexture("assets/backSDChoque.png");
+                                if (BackGroundFramesCounter >= (60/BAckGroundFrameSpeed)){
+                                        BackGroundFramesCounter = 0;
+                                        BackGroundCourrentFrame++;
+                                        if (BackGroundCourrentFrame > 1){
+                                                BackGroundCourrentFrame = 0;
+                                        }
+
+                                        BackgroundFrameRec.x = (float)BackGroundCourrentFrame * ((float)(1080/2));
+                                }
+                                DrawTextureRec(Background, BackgroundFrameRec, BackgroundPosition, WHITE);
+                        
+                                
+                                
+                        }
+                        */
+                      
+                        else if (boss.fase == 2) {
+                                DrawTexturePro(spritesheet_choque, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
+                        }
+                        // 4 - Mapa K vazio
+                        // 5 - Mapa K preenchido
+
+                        // =========================================================================== //
+
+
+
+
+
+
+                        // DETERMINANDO A ORDEM COM A QUAL DEVEMOS DESENHAR O PLAYER ========= //
                         if (player.y <= mesa1.y) player.DrawPlayer();
-                        DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
-                        DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
+                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
+                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
                         if (player.y > mesa1.y && player.y <= mesa2.y) player.DrawPlayer();
 
-                        DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
-                        DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
+                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
+                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
                         if (player.y > mesa2.y && player.y <= mesa3.y) player.DrawPlayer();
 
-                        DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
-                        DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
+                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
+                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
                         if (player.y > mesa3.y && player.y <= mesa7.y) player.DrawPlayer();
 
-                        DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
-                        DrawTexture(mesaJailson, 0, 492, WHITE);
+                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
+                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesaJailson, 0, 492, WHITE);
                         if (player.y >= mesa7.y) player.DrawPlayer();
-                        // ------------------------------------------------------------- //
+                        // ================================================================= //
+
+
 
                         boss.DrawSD();
 
@@ -210,27 +284,50 @@ int main() {
                         boss.AtaqueSD();
 
 
-                        // 1 minuto de chicotada
+
+
+                        // MUDANÇA DE ETAPA DA FASE ===================================================== //
+
+                        // CHICOTADA (1min)
                         if (boss.timer >= 3600 && boss.fase == 0) {
                                 boss.fase = 1;
                                 boss.timer = 0;
                         }
-                        // 3 segundos de contagem regressiva + 5 segundos de choque
-                        if (boss.timer >= 480 && boss.fase == 1) {
+                        // CONTAGEM (3seg)
+                        if (boss.timer >= 240 && boss.fase == 1) {
                                 boss.fase = 2;
                                 boss.timer = 0;
                         }
-                        // 15 segundos mostrando a equação + 5 segundos mostrando Mapa K
-                        if (boss.timer >= 1200 && boss.fase == 2) {
-                                // tela de vitoria ou derrota
+                        // CHOQUE (5seg)
+                        if (boss.timer >= 300 && boss.fase == 2) {
+                                boss.fase = 3;
+                                boss.timer = 0;
+                        }
+                        // MESAS VAZIAS (20seg)
+                        if (boss.timer >= 600 && boss.fase == 3) {
+
                         }
 
-                        Vector2 posmouse = GetMousePosition();
+                        // 15 segundos mostrando a equação + 5 segundos mostrando Mapa K
+                        if (boss.timer >= 1200 && boss.fase == 2) {
+                                /*
+
+                                se o player estiver em lugar seguro e com vida maior que 0 -> tela de vitória
+                                se o player estiver em lugar inseguro ou com vida menor que 0 -> tela de derrota
+
+                                */
+                        }
+                        //=============================================================================== //
+
+
+
+                        // Posição do player (tirar depois)
                         std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
 
                 EndDrawing();
         }
 
+        UnloadTexture(spritesheet_choque);
         CloseWindow();
 
         return 0;
