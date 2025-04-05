@@ -2,11 +2,11 @@
 #define GAMEPLAY_HPP
 
 #include "raylib.h"
-#include "screens.hpp"
 #include "animation.hpp"
 
 class Player {
 	public:
+		Player();
 		Player(Vector2 position, float health, float speed, float radius, float widht, float height, Color color);
 		
 		void Init(Vector2 position, float health);

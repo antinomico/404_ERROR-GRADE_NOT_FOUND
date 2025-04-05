@@ -1,4 +1,5 @@
 #include "raylib.h"
+#include "raymath.h"
 #include "screens.hpp"
 #include "animation.hpp"
 #include "gameplay.hpp"
@@ -13,6 +14,7 @@ typedef enum GameplayScreens {
     EPILOGUE = 4
 }   GameplayScreens;
 
+
 GameplayScreen::GameplayScreen() :
     framesCounter(0), finishScreen(0), state(PROLOGUE), lastState(PROLOGUE) {
 }
@@ -24,7 +26,7 @@ GameplayScreen::~GameplayScreen() {
 void GameplayScreen::Init() {
     framesCounter = 0;
     finishScreen = 0;
-	//Player player({ 400, 225 }, 100.0f, 5.0f, 20.0f, WHITE);
+	Player player({ 400.0f, 255.0f }, 100.0f, 5.0f, 5.0f, 20.0f, 20.0f, RED);
 }
 
 void GameplayScreen::Update() {
@@ -66,6 +68,9 @@ void GameplayScreen::Draw() {
 	}
 	else if (state == SD_BATTLE) {
 		// tela de batalha
+		player.PosUpdate();
+		player.AnimUpdate();
+		player.Draw();
 	}
 	else if (state == TRANSITION) {
 		// tela de transição

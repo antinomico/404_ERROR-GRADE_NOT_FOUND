@@ -2,6 +2,7 @@
 #define SCREENS_HPP
 
 #include "raylib.h"
+#include "gameplay.hpp"
 
 // enumeração para identificar as telas
 typedef enum GameScreen {
@@ -141,8 +142,10 @@ class GameplayScreen {
         void Draw();
         void Unload();
         bool Finish() const;
-
+        
     private:
+        Player player;
+
         int framesCounter;
         bool finishScreen;
 		int state;

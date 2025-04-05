@@ -11,6 +11,17 @@ typedef enum AnimationPlayer {
 	DIE = 4
 };
 
+Player::Player() :
+	position({ 0, 0 }), swordPosition({ 0, 0 }), health(100.0f), speed(5.0f), radius(5.0f), width(20.0f), height(20.0f), color(RED), state(IDLE) {
+	idleAnimation = Animation("rsc/player_idle.png", 4, 0.1f, 0.2f),
+		runAnimation = Animation("rsc/player_run.png", 4, 0.1f, 0.2f),
+		dashAnimation = Animation("rsc/player_dash.png", 4, 0.1f, 0.2f),
+		attackAnimation = Animation("rsc/player_attack.png", 4, 0.1f, 0.2f),
+		dieAnimation = Animation("rsc/player_die.png", 4, 0.1f, 0.2f);
+	direction = { 0, 0 };
+	dash_timer = 0.0f;
+}
+
 // exemplo de classe player com supostos sprites
 Player::Player(Vector2 position, float health, float speed, float radius, float width, float height, Color color) :
 	position(position), swordPosition(position), health(health), speed(speed), radius(radius), width(width), height(height), color(color), state(IDLE) {
@@ -34,15 +45,21 @@ void Player::PosUpdate() {
 	if (health <= 0) {
 	}
 	else {
-		if (IsKeyPressed(KEY_LEFT_SHIFT)) {
+		if (dash_timer > 0) {
 			dash_timer++;
-
 			if (dash_timer > 150.0f)
 				dash_timer = 0.0f;
-			
-			speed = dash_timer <= 10.0f ? speed * 2 : speed;			
+			else if (dash_timer > 10.0f)
+				speed = 5.0f;
 		}
-		else if (IsKeyPressed(KEY_J)) {
+
+		if (IsKeyDown(KEY_LEFT_SHIFT)) {
+			if (!dash_timer)
+				dash_timer++;
+			speed = dash_timer <= 10.0f ? 10.0f : 5.0f;			
+		}
+		
+		if (IsKeyPressed(KEY_J)) {
 		
 		}
 		
@@ -63,8 +80,8 @@ void Player::PosUpdate() {
 
 		if (Vector2Length(direction) > 0) {
 			direction = Vector2Normalize(direction);
-			position.x += direction.x * speed * GetFrameTime();
-			position.y += direction.y * speed * GetFrameTime();
+			position.x += direction.x * speed;
+			position.y += direction.y * speed;
 		}
 	}
 }
@@ -104,6 +121,7 @@ void Player::AnimUpdate() {
 }
 
 void Player::Draw() {
+	/*
 	switch (state) {
 	case IDLE:
 		idleAnimation.Draw(position, GetKeyPressed());
@@ -121,6 +139,8 @@ void Player::Draw() {
 		dieAnimation.Draw(position, GetKeyPressed());
 		break;
 	}
+	*/
+	DrawRectangle(position.x, position.y, width, height, RED);
 }
 
 void Player::Unload() {

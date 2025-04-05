@@ -48,9 +48,6 @@
     <ClCompile Include="ALBoss.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Downloads\BOSS_alg_vecATK_and_JUMP.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="rsc\mecha.png">
