@@ -31,39 +31,96 @@ MesaHW mesa1({180, 212}),
                                                                                                                                                               
 void init() {
 
+        // VARIÁVEIS DO PLAYER ======== //
         player.x = Hres / 2;
         player.y = Vres / 2;
         player.dash_t = 0;
+        player.frameCounter = 0;
+        player.currentFrame = 0;
+        player.frameSpeed = 8;
+        player.lastPos = 0;
+        // ============================ //
 
 
-        // Background
+        // BACKGROUND =========================================== //
         background_SD_img = LoadImage("assets/backSD.png");
         ImageResize(&background_SD_img, Hres, Vres);
         background_SD = LoadTextureFromImage(background_SD_img);
+        // ====================================================== //
 
-        // Mesa Jailson
+
+        // MESA JAILSON ========================================= //
         mesaJailson_img = LoadImage("assets/mesaJailson.png");
         mesaJailson = LoadTextureFromImage(mesaJailson_img);
         mesaJailson.width *= 2;
         mesaJailson.height *= 2;
+        // ====================================================== //
 
+
+
+        // SPRITES DO PLAYER ============================================= //
+
+        // Player andando para cima
         player.playerUP_img = LoadImage("assets/playercima.png");
+        player.playerUP_L_img = LoadImage("assets/playercima_left.png");
+        player.playerUP_R_img = LoadImage("assets/playercima_right.png");
+
+        // Player andando para baixo
         player.playerDOWN_img = LoadImage("assets/playerbaixo.png");
+        player.playerDOWN_L_img = LoadImage("assets/playerbaixo_left.png");
+        player.playerDOWN_R_img = LoadImage("assets/playerbaixo_right.png");
+
+        // Player andando para direita
         player.playerRIGHT_img = LoadImage("assets/playerdir.png");
+        player.playerRIGHT_L_img = LoadImage("assets/playerdir_left.png");
+        player.playerRIGHT_R_img = LoadImage("assets/playerdir_right.png");
+
+        // Player andando para esquerda
         player.playerLEFT_img = LoadImage("assets/playeresq.png");
+        player.playerLEFT_L_img = LoadImage("assets/playeresq_left.png");
+        player.playerLEFT_R_img = LoadImage("assets/playeresq_right.png");
 
+
+        // Redimensionamento das imagens
         ImageResize(&player.playerUP_img, 47, 126);
+        ImageResize(&player.playerUP_L_img, 60, 126);
+        ImageResize(&player.playerUP_R_img, 60, 126);
+
         ImageResize(&player.playerDOWN_img, 47, 126);
+        ImageResize(&player.playerDOWN_L_img, 60, 126);
+        ImageResize(&player.playerDOWN_R_img, 60, 126);
+
         ImageResize(&player.playerLEFT_img, 47, 126);
+        ImageResize(&player.playerLEFT_L_img, 60, 126);
+        ImageResize(&player.playerLEFT_R_img, 60, 126);
+
         ImageResize(&player.playerRIGHT_img, 47, 126);
+        ImageResize(&player.playerRIGHT_L_img, 60, 126);
+        ImageResize(&player.playerRIGHT_R_img, 60, 126);
 
+        // Carregamento das texturas
         player.playerUP = LoadTextureFromImage(player.playerUP_img);
+        player.playerUP_L = LoadTextureFromImage(player.playerUP_L_img);
+        player.playerUP_R = LoadTextureFromImage(player.playerUP_R_img);
+
         player.playerDOWN = LoadTextureFromImage(player.playerDOWN_img);
+        player.playerDOWN_L = LoadTextureFromImage(player.playerDOWN_L_img);
+        player.playerDOWN_R = LoadTextureFromImage(player.playerDOWN_R_img);
+
         player.playerRIGHT = LoadTextureFromImage(player.playerRIGHT_img);
+        player.playerRIGHT_L = LoadTextureFromImage(player.playerRIGHT_L_img);
+        player.playerRIGHT_R = LoadTextureFromImage(player.playerRIGHT_R_img);
+
+
         player.playerLEFT = LoadTextureFromImage(player.playerLEFT_img);
+        player.playerLEFT_L = LoadTextureFromImage(player.playerLEFT_L_img);
+        player.playerLEFT_R = LoadTextureFromImage(player.playerLEFT_R_img);
+
+        // ====================================================================== //
 
 
-        // MesasHW -------------- MODULARIZAR !!!!!
+
+        // MESAS HW ----------------------------------------- //
         mesa1.texture = LoadTextureFromImage(mesa1.img);
         mesa1.texture.width *= 2;
         mesa1.texture.height *= 2;
@@ -105,7 +162,11 @@ void init() {
         mesa7.texture.height *= 2;
         mesa7.x = 576;
         mesa7.y = 492;
+
+        // ------------------------------------------------------ //
 }
+
+
 int main() {
 
         InitWindow(Hres, Vres, "Boss SD");
@@ -121,9 +182,7 @@ int main() {
                         ClearBackground(BLACK);
                         DrawTexture(background_SD, 0, 0, WHITE);
 
-                        //player.DrawPlayer();
-
-                        //DETERMINANDO A ORDEM COM A QUAL DEVEMOS DESENHAR O PLAYER
+                        // DETERMINANDO A ORDEM COM A QUAL DEVEMOS DESENHAR O PLAYER ------ //
                         if (player.y <= mesa1.y) player.DrawPlayer();
                         DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
                         DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
@@ -140,7 +199,7 @@ int main() {
                         DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
                         DrawTexture(mesaJailson, 0, 492, WHITE);
                         if (player.y >= mesa7.y) player.DrawPlayer();
-                        //-------------------------------------------------------------//
+                        // ------------------------------------------------------------- //
 
                         boss.DrawSD();
 
