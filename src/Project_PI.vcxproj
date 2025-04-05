@@ -130,6 +130,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Downloads\BOSS_alg_vecATK_and_JUMP.cpp" />
+    <ClCompile Include="ALBoss.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="game_title.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -138,6 +140,7 @@
     <ClCompile Include="LogoCINScreen.cpp" />
     <ClCompile Include="LogoRLScreen.cpp" />
     <ClCompile Include="OptionsScreen.cpp" />
+    <ClCompile Include="SDBoss.cpp" />
     <ClCompile Include="TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>

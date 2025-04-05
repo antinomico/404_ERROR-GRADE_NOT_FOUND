@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "animation.hpp"
 #include "gameplay.hpp"
+#include "raymath.h"
 
 typedef enum AnimationPlayer {
 	IDLE = 0,
@@ -11,50 +12,59 @@ typedef enum AnimationPlayer {
 };
 
 // exemplo de classe player com supostos sprites
-Player::Player(Vector2 position, float health, float speed, float radius, Color color) :
-	position(position), health(health), speed(speed), radius(radius), color(color) {
+Player::Player(Vector2 position, float health, float speed, float radius, float width, float height, Color color) :
+	position(position), swordPosition(position), health(health), speed(speed), radius(radius), width(width), height(height), color(color), state(IDLE) {
 	idleAnimation = Animation("rsc/player_idle.png", 4, 0.1f, 0.2f),
 	runAnimation = Animation("rsc/player_run.png", 4, 0.1f, 0.2f),
 	dashAnimation = Animation("rsc/player_dash.png", 4, 0.1f, 0.2f),
 	attackAnimation = Animation("rsc/player_attack.png", 4, 0.1f, 0.2f),
 	dieAnimation = Animation("rsc/player_die.png", 4, 0.1f, 0.2f);
-	state = 0;
+	direction = { 0, 0 };
+	dash_timer = 0.0f;
 }
 
-void Player::Init() {
-	position = { 400, 225 };
-	
-	speed = 5.0f;
-	radius = 20.0f;
-	health = 100.0f;
-
-	color = { 255, 255, 255, 255 };
+void Player::Init(Vector2 position, float health) {
+	this->position = position;
+	this->health = health;
 
 	state = IDLE;
-	
 }
 
 void Player::PosUpdate() {
 	if (health <= 0) {
 	}
 	else {
-		if (IsKeyPressed(KEY_SPACE)) {
+		if (IsKeyPressed(KEY_LEFT_SHIFT)) {
+			dash_timer++;
+
+			if (dash_timer > 150.0f)
+				dash_timer = 0.0f;
+			
+			speed = dash_timer <= 10.0f ? speed * 2 : speed;			
 		}
 		else if (IsKeyPressed(KEY_J)) {
+		
 		}
-		else if (IsKeyDown(KEY_A)) {
-			position.x -= speed;
+		
+		direction = { 0, 0 };
+
+		if (IsKeyDown(KEY_A)) {
+			direction.x -= 1;
 		}
-		else if (IsKeyDown(KEY_D)) {
-			position.x += speed;
+		if (IsKeyDown(KEY_D)) {
+			direction.x += 1;
 		}
-		else if (IsKeyDown(KEY_W)) {
-			position.y -= speed;
+		if (IsKeyDown(KEY_W)) {
+			direction.y -= 1;
 		}
-		else if (IsKeyDown(KEY_S)) {
-			position.y += speed;
+		if (IsKeyDown(KEY_S)) {
+			direction.y += 1;
 		}
-		else {
+
+		if (Vector2Length(direction) > 0) {
+			direction = Vector2Normalize(direction);
+			position.x += direction.x * speed * GetFrameTime();
+			position.y += direction.y * speed * GetFrameTime();
 		}
 	}
 }

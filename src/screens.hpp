@@ -127,6 +127,7 @@ class OptionsScreen {
     private:
 	    int framesCounter;
 	    bool finishScreen;
+
 };
 
 // tela de gameplay
@@ -144,6 +145,8 @@ class GameplayScreen {
     private:
         int framesCounter;
         bool finishScreen;
+		int state;
+        int lastState;
 };
 
 // tela de finalização
