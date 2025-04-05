@@ -19,6 +19,7 @@ Texture2D mesaJailson;
 float angle_deg = 24.9547f;
 
 
+
 BossSD boss;
 Player player;
 MesaHW mesa1({180, 212}),
@@ -175,7 +176,9 @@ int main() {
         init();
 
         while (!WindowShouldClose()) {
+
                 player.UpdatePlayer();
+                boss.timer++;
 
                 BeginDrawing();
 
@@ -203,8 +206,26 @@ int main() {
 
                         boss.DrawSD();
 
-                        Vector2 posmouse = GetMousePosition();
 
+                        boss.AtaqueSD();
+
+
+                        // 1 minuto de chicotada
+                        if (boss.timer >= 3600 && boss.fase == 0) {
+                                boss.fase = 1;
+                                boss.timer = 0;
+                        }
+                        // 3 segundos de contagem regressiva + 5 segundos de choque
+                        if (boss.timer >= 480 && boss.fase == 1) {
+                                boss.fase = 2;
+                                boss.timer = 0;
+                        }
+                        // 15 segundos mostrando a equação + 5 segundos mostrando Mapa K
+                        if (boss.timer >= 1200 && boss.fase == 2) {
+                                // tela de vitoria ou derrota
+                        }
+
+                        Vector2 posmouse = GetMousePosition();
                         std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
 
                 EndDrawing();

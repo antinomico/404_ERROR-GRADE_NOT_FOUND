@@ -6,12 +6,13 @@ public:
 	BossSD();
 	~BossSD();
 	void DrawSD();
+	void AtaqueSD();
 	void Chicotada();
-	void JogarCI();
 	void ChoqueMesas();
 	void MapaK();
 	Vector2 positionSD;
-	int timer_chicotada;
+	int timer;
+	int timer_choque;
 	
 	int fase; // 0 - CHICOTADA // 1 - JOGAR CI // 2 - CHOQUE MESAS // 3 - MAPA K
 
