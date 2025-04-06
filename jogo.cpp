@@ -8,13 +8,12 @@
 #define Hres 1080
 #define Vres 720
 
-/* =====================================================================================
+/*
 Texto para iniciar a fase:
 
 Agora xxxxx precisa enfrentar o terror das quintas-feiras: o laboratório de hardware!
 Lembre de pegar a caixa de fios de Jailson para poder combater o boss!
-======================================================================================== */ 
-
+*/
 
 
 // FUNÇÕES ================= //
@@ -27,42 +26,28 @@ void Liberar();
 void InitPlayer();
 void InitCenario();
 void VitoriaOuDerrota();
-void GIFsBack();
 // ========================== //
-
-
-
-
 // VARIÁVEIS INICIAIS ============ //
+chicote vec;
 Texture2D background_SD;
 Texture2D mesas_SD;
 Texture2D mesaJailson;
 Texture2D spritesheet_choque;
 Texture2D background_SD_MapaK_Vazio;
-Texture2D spritesheet_final;
-Texture2D equacao;
 
 Image background_SD_img;
 Image mesas_SD_img;
 Image mesaJailson_img;
 Image background_SD_MapaK_Vazio_img;
-Image equacao_img;
 
-Rectangle sourceRecChoque;
-Rectangle destRecChoque;
-
-Rectangle sourceRecFinal;
-Rectangle destRecFinal;
+Rectangle sourceRec;
+Rectangle destRec;
 
 float angle_deg = 24.9547f;
 
-int currentFrameChoque;
-int frameCounterChoque;
-int frameDelayChoque;
-
-int currentFrameFinal;
-int frameCounterFinal;
-int frameDelayFinal;
+int currentFrame;
+int frameCounter;
+int frameDelay;
 // =============================== //
 
 
@@ -79,10 +64,6 @@ MesaHW mesa1,
        mesa6,
        mesa7;
 // ================================= //
-
-
-
-
 int main() {
 
         InitWindow(Hres, Vres, "Boss SD");
@@ -94,7 +75,13 @@ int main() {
 
                 player.UpdatePlayer(boss.etapa);
 
-                GIFsBack();
+                frameCounter++;
+                if (frameCounter >= frameDelay) {
+                        frameCounter = 0;
+                        currentFrame = (currentFrame + 1) % 2;
+                        sourceRec.x = (float)(currentFrame * 540.0f);
+                }
+                boss.timer++;
 
                 BeginDrawing();
 
@@ -103,7 +90,8 @@ int main() {
                         DeterminarBackground();
                         DesenhoPlayerMesas();
                         boss.DrawSD();
-                        boss.AtaqueSD();
+                        //boss.Chicotada(player, &vec);
+                        boss.AtaqueSD(player, &vec);
                         MudarEtapa();
                         Etapas();
                         VitoriaOuDerrota();
@@ -119,12 +107,16 @@ int main() {
 
         return 0;
 }
-
-
 void Init() {
 
         InitPlayer();
         InitCenario();
+        vec.reverse = 1;
+        vec.cx = boss.positionSD.x;
+        vec.cy = boss.positionSD.y;
+        vec.dex = player.x;
+        vec.dey = player.y;
+        boss.timer_chicotada = 0;
 
 }
 
@@ -149,15 +141,12 @@ void DesenhoPlayerMesas() {
 
 void DeterminarBackground() {
         if (boss.etapa == 0 || boss.etapa == 1 || boss.etapa == 3) DrawTexture(background_SD, 0, 0, WHITE); // Fundo normal
-                      
-        else if (boss.etapa == 2)  DrawTexturePro(spritesheet_choque, sourceRecChoque, destRecChoque, {0, 0}, 0.0f, WHITE);
+
+        else if (boss.etapa == 2)  DrawTexturePro(spritesheet_choque, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
 
         else if (boss.etapa == 4) DrawTexture(background_SD_MapaK_Vazio, 0, 0, WHITE);
 
-        else if (boss.etapa == 5) DrawTexturePro(spritesheet_final, sourceRecFinal, destRecFinal, {0, 0}, 0.0f, WHITE);
-
 }
-
 void MudarEtapa() {
         // CHICOTADA (1min) -> CONTAGEM
         if (boss.timer >= 3600 && boss.etapa == 0) {
@@ -187,69 +176,13 @@ void MudarEtapa() {
 }
 
 void Etapas() {
-        
         // Choque
         if (boss.etapa == 2) {
                 if (player.EntreMesas()) {
                         player.vivo = false;
                 }
         }
-
-        if (boss.etapa = 3) {
-                if (boss.timer < 30) {
-                        
-                }
-        }
-
-        // Fim do Mapa K
-        if (boss.etapa == 5) {
-                // Colocar áudio de vitória
-
-                // Primeiro 1
-                if ((player.y <= ((0.0488f * player.x) + 186.502f)) &&
-                    (player.y >= ((0.02765f * player.x) + 109.907f)) &&
-                    (player.x >= ((-0.20181f * player.y) + 538.26)) &&
-                    (player.x <= ((-0.2472f * player.y) + 716.59))) {
-                        
-                        player.ganhou = 1;
-                }
-
-                // Segundo 1
-                else if ((player.x >= ((-0.16984f * player.y) + 911.332f)) &&
-                         (player.y >= ((0.0267f * player.x) + 200.941f)) &&
-                         (player.y <= ((0.05027f * player.x) + 289.944f))) {
-
-                        player.ganhou = 1;
-                }
-
-                // Terceiro 1
-                else if ((player.x >= ((-0.30191f * player.y) + 370.339f)) &&
-                         (player.x <= ((-0.28146f * player.y) + 552.163f)) &&
-                         (player.y >= 323.734f) &&
-                         (player.y <= ((0.06845f * player.x) + 411.675f))) {
-                        
-                        player.ganhou = 1;
-                }
-
-                // Quarto 1
-                else if ((player.y >= ((-0.008635f * player.x) + 469.671f)) &&
-                         (player.x >= ((-0.21909f * player.y) + 723.879f)) &&
-                         (player.x <= ((-0.19657f * player.y) + 928.833))) {
-                                
-                        player.ganhou = 1;
-                }
-
-                // Colocar áudio de derrota
-                else {
-                        player.vivo = false;
-                }
-
-
-        }
-
-
 }
-
 void Liberar() {
         UnloadTexture(spritesheet_choque);
         UnloadTexture(background_SD);
@@ -273,8 +206,6 @@ void Liberar() {
         UnloadTexture(mesa5.texture);
         UnloadTexture(mesa6.texture);
         UnloadTexture(mesa7.texture);
-        UnloadTexture(spritesheet_final);
-        UnloadTexture(background_SD_MapaK_Vazio);
 
 
         UnloadImage(background_SD_img);
@@ -298,7 +229,6 @@ void Liberar() {
         UnloadImage(mesa5.img);
         UnloadImage(mesa6.img);
         UnloadImage(mesa7.img);
-        UnloadImage(background_SD_MapaK_Vazio_img);
 }
 
 void InitPlayer() {
@@ -373,7 +303,6 @@ void InitPlayer() {
 
         // ====================================================================== //
 }
-
 void InitCenario() {
 
         // BACKGROUND =========================================== //
@@ -386,23 +315,11 @@ void InitCenario() {
         background_SD_MapaK_Vazio = LoadTextureFromImage(background_SD_MapaK_Vazio_img);
 
         spritesheet_choque = LoadTexture("assets/backSDchoque.png");
-        sourceRecChoque = { 0.0f, 0.0f, 540.0f, 360.0f };
-        destRecChoque = { 0.0f, 0.0f, Hres, Vres };
-        currentFrameChoque = 0;
-        frameCounterChoque = 0;
-        frameDelayChoque = 15;
-
-        spritesheet_final = LoadTexture("assets/backSDfinal.png");
-        sourceRecFinal = { 0.0f, 0.0f, 540.0f, 360.0f };
-        destRecFinal = { 0.0f, 0.0f, Hres, Vres };
-        currentFrameFinal = 0;
-        frameCounterFinal = 0;
-        frameDelayFinal = 15;
-
-        equacao_img = LoadImage("assets/equacao.png");
-        ImageResize(&equacao_img, Hres, Vres);
-        equacao = LoadTextureFromImage(equacao_img);
-        
+        sourceRec = { 0.0f, 0.0f, 540.0f, 360.0f };
+        destRec = { 0.0f, 0.0f, Hres, Vres };
+        currentFrame = 0;
+        frameCounter = 0;
+        frameDelay = 15;
         // ====================================================== //
 
 
@@ -459,7 +376,6 @@ void InitCenario() {
 
         // ===================================================== //
 }
-
 void VitoriaOuDerrota() {
         if (player.vivo == false) {
                 // Ir para tela de derrota
@@ -469,23 +385,5 @@ void VitoriaOuDerrota() {
         if (player.ganhou == true) {
                 // Ir para tela de vitória
                 DrawText("GANHOU", 360, 100, 30, RED); // Para debug
-        }
-}
-
-void GIFsBack() {
-        frameCounterChoque++;
-        if (frameCounterChoque >= frameDelayChoque) {
-                frameCounterChoque = 0;
-                currentFrameChoque = (currentFrameChoque + 1) % 2;
-                sourceRecChoque.x = (float)(currentFrameChoque * 540.0f);
-        }
-        boss.timer++;
-
-
-        frameCounterFinal++;
-        if (frameCounterFinal > frameDelayFinal) {
-                frameCounterFinal = 0;
-                currentFrameFinal = (currentFrameFinal + 1) % 2;
-                sourceRecFinal.x = (float)(currentFrameFinal * 540.0f); 
         }
 }
