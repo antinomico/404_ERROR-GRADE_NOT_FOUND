@@ -60,146 +60,152 @@ void Player::UpdatePlayer(int i) {
     if (dash_t >= 150) dash_t = 0; // Reset do timer do dash
 
 
+    if (i != 5) {
+        // ============================== CIMA ================================ //
+        if (IsKeyDown(KEY_W)) {
 
-    // ============================== CIMA ================================ //
-    if (IsKeyDown(KEY_W)) {
+            lastPos = 0;
+            // POSIÇÃO =============================================== //
+            if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
+                y += speed_dash * dir.y;
+                x += speed_dash * dir.x;
+                qtdMovX += speed_dash * dir.x;
+                qtdMovY += speed_dash * dir.y;
+                dash_t++;
+            }
+            else {
+                y += dir.y * speed;
+                x += dir.x * speed;
+                qtdMovX += speed * dir.x;
+                qtdMovY += speed * dir.y;
+            }
 
-        lastPos = 0;
-        // POSIÇÃO =============================================== //
-        if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
-            y += speed_dash * dir.y;
-            x += speed_dash * dir.x;
-            qtdMovX += speed_dash * dir.x;
-            qtdMovY += speed_dash * dir.y;
-            dash_t++;
-        }
-        else {
-            y += dir.y * speed;
-            x += dir.x * speed;
-            qtdMovX += speed * dir.x;
-            qtdMovY += speed * dir.y;
-        }
-
-        // SPRITE ================================================ //
-        if (frameCounter >= 60/frameSpeed) {
-            
-            frameCounter = 0;
-            currentFrame++;
-
-            if (currentFrame > 3) currentFrame = 0;
-
-            if (currentFrame == 0) playerNOW = playerUP_L;
-            else if (currentFrame == 1) playerNOW = playerUP;
-            else if (currentFrame == 2) playerNOW = playerUP_R;
-            else if (currentFrame == 3) playerNOW = playerUP;
-        }
-    }
-
-
-
-    // ========================= ESQUERDA ======================== //
-    else if (IsKeyDown(KEY_A)) {
-        
-        lastPos = 2;
-        // POSIÇÃO ======================================== //
-        if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))
-        {
-            x -= speed_dash;
-            qtdMovX -= speed_dash;
-            dash_t++;
-        }
-        else x -= speed;
-        qtdMovX -= speed;
-    
-
-        // SPRITE ================================================ //
-        if (frameCounter >= 60/frameSpeed) {
+            // SPRITE ================================================ //
+            if (frameCounter >= 60/frameSpeed) {
                 
-            frameCounter = 0;
-            currentFrame++;
+                frameCounter = 0;
+                currentFrame++;
 
-            if (currentFrame > 3) currentFrame = 0;
+                if (currentFrame > 3) currentFrame = 0;
 
-            if (currentFrame == 0) playerNOW = playerLEFT_L;
-            else if (currentFrame == 1) playerNOW = playerLEFT;
-            else if (currentFrame == 2) playerNOW = playerLEFT_R;
-            else if (currentFrame == 3) playerNOW = playerLEFT;
+                if (currentFrame == 0) playerNOW = playerUP_L;
+                else if (currentFrame == 1) playerNOW = playerUP;
+                else if (currentFrame == 2) playerNOW = playerUP_R;
+                else if (currentFrame == 3) playerNOW = playerUP;
+            }
         }
 
-    }
 
-    // =========================== BAIXO ============================= //
-    else if (IsKeyDown(KEY_S)) {
-        lastPos = 1;
-        // POSIÇÃO ===================================== //
-        if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))
-        {
-            y -= dir.y * speed_dash;
-            x -= dir.x * speed_dash;
-            dash_t++;
-            qtdMovX -= speed_dash * dir.x;
-            qtdMovY -= speed_dash * dir.y;
-        }
-        else {
-            y -= dir.y * speed;
-            x -= dir.x * speed;
-            qtdMovX -= speed * dir.x;
-            qtdMovY -= speed * dir.y;
-        }
 
-        // SPRITE ================================================ //
-        if (frameCounter >= 60/frameSpeed) {
+        // ========================= ESQUERDA ======================== //
+        else if (IsKeyDown(KEY_A)) {
             
-            frameCounter = 0;
-            currentFrame++;
+            lastPos = 2;
+            // POSIÇÃO ======================================== //
+            if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))
+            {
+                x -= speed_dash;
+                qtdMovX -= speed_dash;
+                dash_t++;
+            }
+            else x -= speed;
+            qtdMovX -= speed;
+        
 
-            if (currentFrame > 3) currentFrame = 0;
+            // SPRITE ================================================ //
+            if (frameCounter >= 60/frameSpeed) {
+                    
+                frameCounter = 0;
+                currentFrame++;
 
-            if (currentFrame == 0) playerNOW = playerDOWN_L;
-            else if (currentFrame == 1) playerNOW = playerDOWN;
-            else if (currentFrame == 2) playerNOW = playerDOWN_R;
-            else if (currentFrame == 3) playerNOW = playerDOWN;
+                if (currentFrame > 3) currentFrame = 0;
+
+                if (currentFrame == 0) playerNOW = playerLEFT_L;
+                else if (currentFrame == 1) playerNOW = playerLEFT;
+                else if (currentFrame == 2) playerNOW = playerLEFT_R;
+                else if (currentFrame == 3) playerNOW = playerLEFT;
+            }
+
         }
-    }
 
+        // =========================== BAIXO ============================= //
+        else if (IsKeyDown(KEY_S)) {
+            lastPos = 1;
+            // POSIÇÃO ===================================== //
+            if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))
+            {
+                y -= dir.y * speed_dash;
+                x -= dir.x * speed_dash;
+                dash_t++;
+                qtdMovX -= speed_dash * dir.x;
+                qtdMovY -= speed_dash * dir.y;
+            }
+            else {
+                y -= dir.y * speed;
+                x -= dir.x * speed;
+                qtdMovX -= speed * dir.x;
+                qtdMovY -= speed * dir.y;
+            }
 
+            // SPRITE ================================================ //
+            if (frameCounter >= 60/frameSpeed) {
+                
+                frameCounter = 0;
+                currentFrame++;
 
-    // ============================ DIREITA ================================= //
-    else if (IsKeyDown(KEY_D)) {
-        lastPos = 3;
-        // POSIÇÃO =============================================== //
-        if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
-            x += speed_dash;
-            qtdMovX += speed_dash;
-            dash_t++;
+                if (currentFrame > 3) currentFrame = 0;
+
+                if (currentFrame == 0) playerNOW = playerDOWN_L;
+                else if (currentFrame == 1) playerNOW = playerDOWN;
+                else if (currentFrame == 2) playerNOW = playerDOWN_R;
+                else if (currentFrame == 3) playerNOW = playerDOWN;
+            }
         }
+
+
+
+        // ============================ DIREITA ================================= //
+        else if (IsKeyDown(KEY_D)) {
+            lastPos = 3;
+            // POSIÇÃO =============================================== //
+            if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
+                x += speed_dash;
+                qtdMovX += speed_dash;
+                dash_t++;
+            }
+            else {
+                x += speed;
+                qtdMovX += speed;
+            }
+
+            // SPRITE ================================================ //
+            if (frameCounter >= 60/frameSpeed) {
+                
+                frameCounter = 0;
+                currentFrame++;
+
+                if (currentFrame > 3) currentFrame = 0;
+
+                if (currentFrame == 0) playerNOW = playerRIGHT_L;
+                else if (currentFrame == 1) playerNOW = playerRIGHT;
+                else if (currentFrame == 2) playerNOW = playerRIGHT_R;
+                else if (currentFrame == 3) playerNOW = playerRIGHT;
+            }
+        }
+        // ===================================================================== //
+
+
         else {
-            x += speed;
-            qtdMovX += speed;
+            if (lastPos == 0) playerNOW = playerUP;
+            else if (lastPos == 1) playerNOW = playerDOWN;
+            else if (lastPos == 2) playerNOW = playerLEFT;
+            else if (lastPos == 3) playerNOW = playerRIGHT;
         }
 
-        // SPRITE ================================================ //
-        if (frameCounter >= 60/frameSpeed) {
-            
-            frameCounter = 0;
-            currentFrame++;
-
-            if (currentFrame > 3) currentFrame = 0;
-
-            if (currentFrame == 0) playerNOW = playerRIGHT_L;
-            else if (currentFrame == 1) playerNOW = playerRIGHT;
-            else if (currentFrame == 2) playerNOW = playerRIGHT_R;
-            else if (currentFrame == 3) playerNOW = playerRIGHT;
-        }
     }
-    // ===================================================================== //
-
 
     else {
-        if (lastPos == 0) playerNOW = playerUP;
-        else if (lastPos == 1) playerNOW = playerDOWN;
-        else if (lastPos == 2) playerNOW = playerLEFT;
-        else if (lastPos == 3) playerNOW = playerRIGHT;
+        playerNOW = playerDOWN;
     }
 
     // ================================= COLISÕES ======================================= //

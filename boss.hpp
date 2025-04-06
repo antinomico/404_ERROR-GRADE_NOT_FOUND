@@ -8,8 +8,8 @@ public:
 	void DrawSD();
 	void AtaqueSD();
 	void Chicotada();
-	void Contagem();
-	void MapaK();
+	void ContagemChoque();
+	void ContagemMapaK();
 	Vector2 positionSD;
 	int timer;
 	int timer_choque;
