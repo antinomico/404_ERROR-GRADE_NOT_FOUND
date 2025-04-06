@@ -3,9 +3,8 @@
 
 class MesaHW {
     public:
-        MesaHW(Vector2 ta);
+        MesaHW();
         ~MesaHW();
-        void GerarParalelogramo();
         float x, y;
 		Image img;
 		Texture2D texture;

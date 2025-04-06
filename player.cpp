@@ -223,3 +223,8 @@ void Player::UpdatePlayer(int i) {
     // ================================================================================== //
 
 };
+
+bool Player::EntreMesas() {
+    if ((x <= ((-0.4739f * y) + 549.193f) || x >= ((-0.4785f * y) + 802.222f)) && (y >= 160.539f)) return true;
+    else return false;
+}

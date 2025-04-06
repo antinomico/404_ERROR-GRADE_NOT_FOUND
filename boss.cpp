@@ -9,7 +9,7 @@
 BossSD::BossSD() {
 	positionSD.x = Hres / 2 - 25;
 	positionSD.y = 200;
-	fase = 1;
+	etapa = 1; // Inicia na fase da chicotada
 	timer = 0;
 	timer_choque = 0;
 
@@ -28,9 +28,9 @@ void BossSD::DrawSD() {
 
 void BossSD::AtaqueSD() {
 
-	if (fase == 0) Chicotada();
-	else if (fase == 1) Contagem();
-	else if (fase == 5) MapaK();
+	if (etapa == 0) Chicotada();
+	else if (etapa == 1) Contagem();
+	else if (etapa == 5) MapaK();
 
 }
 
@@ -44,23 +44,23 @@ void BossSD::Chicotada(){
 void BossSD::Contagem(){
 
 	if (timer_choque >= 0 && timer_choque < 60) {
-		DrawText("CHOQUE NAS MESAS EM 3", 50, 50, 30, GRAY);
+		DrawText("CHOQUE NAS MESAS EM 3", 235, 80, 50, RED);
 	}
 
 	else if (timer_choque >= 60 && timer_choque < 120) {
-		DrawText("CHOQUE NAS MESAS EM 2", 50, 50, 30, GRAY);
+		DrawText("CHOQUE NAS MESAS EM 2", 235, 80, 50, RED);
 	}
 
 	else if (timer_choque >= 120 && timer_choque < 180) {
-		DrawText("CHOQUE NAS MESAS EM 1", 50, 50, 30, GRAY);
+		DrawText("CHOQUE NAS MESAS EM 1", 235, 80, 50, RED);
 	}
 
 	else if (timer_choque >= 180 && timer_choque < 240) {
-		DrawText("CHOQUE NAS MESAS EM 0", 50, 50, 30, GRAY);
+		DrawText("CHOQUE NAS MESAS EM 0", 235, 80, 50, RED);
 
 	}
 	else if (timer_choque >= 240) {
-		fase = 2;
+		etapa = 2;
 	}
 
 	timer_choque++;

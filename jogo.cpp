@@ -9,27 +9,33 @@
 #define Vres 720
 
 
+// FUNÇÕES ================= //
+void Init();
+void DesenhoPlayerMesas();
+void DeterminarBackground();
+void MudarEtapa();
+void Etapas();
+void Liberar();
+// ========================== //
+
+
+
+
 // VARIÁVEIS INICIAIS ============ //
-Image background_SD_img;
 Texture2D background_SD;
-Image mesas_SD_img;
 Texture2D mesas_SD;
-Image mesaJailson_img;
 Texture2D mesaJailson;
+Texture2D spritesheet_choque;
+
+Image background_SD_img;
+Image mesas_SD_img;
+Image mesaJailson_img;
+
+Rectangle sourceRec;
+Rectangle destRec;
 
 float angle_deg = 24.9547f;
 
-int BackGroundCourrentFrame = 0;
-int BAckGroundFrameSpeed = 1;
-int BackGroundFramesCounter = 0;
-int BackgroundX = 0;
-int BackgroundY = 0;
-Rectangle BackgroundFrameRec = { 0.0f, 0.0f, (float)1080/2, (float)720 };
-Vector2 BackgroundPosition =  {BackgroundX, BackgroundY};
-
-Texture2D spritesheet_choque;
-Rectangle sourceRec;
-Rectangle destRec;
 int currentFrame;
 int frameCounter;
 int frameDelay;
@@ -37,24 +43,200 @@ int frameDelay;
 
 
 
+
 // INICIALIZAÇÃO DOS OBJETOS ======== //
 BossSD boss;
 Player player;
-MesaHW mesa1({180, 212}),
-       mesa2({133, 314}),
-       mesa3({83, 419}),
-       mesa4({35, 531}),
-       mesa5({676, 274}),
-       mesa6({626, 382}),
-       mesa7({576, 492});
+MesaHW mesa1,
+       mesa2,
+       mesa3,
+       mesa4,
+       mesa5,
+       mesa6,
+       mesa7;
 // ================================= //
-    
 
 
 
-void init() {
 
-        // VARIÁVEIS DO PLAYER ======== //
+int main() {
+
+        InitWindow(Hres, Vres, "Boss SD");
+        SetTargetFPS(60);
+
+        Init();
+
+        while (!WindowShouldClose()) {
+
+                player.UpdatePlayer(boss.etapa);
+
+                frameCounter++;
+                if (frameCounter >= frameDelay) {
+                        frameCounter = 0;
+                        currentFrame = (currentFrame + 1) % 2;
+                        sourceRec.x = (float)(currentFrame * 540.0f);
+                }
+                boss.timer++;
+
+                BeginDrawing();
+
+                        ClearBackground(BLACK);
+
+                        DeterminarBackground();
+                        DesenhoPlayerMesas();
+                        boss.DrawSD();
+                        boss.AtaqueSD();
+                        MudarEtapa();
+                        Etapas();
+
+
+                        if (player.vivo == false) {
+                                // Ir para tela de derrota
+                                DrawText("MORREU", 360, 100, 30, RED); // Para debug
+                        }
+
+
+                        // Posição do player (tirar depois)
+                        std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
+
+                EndDrawing();
+        }
+
+        Liberar();
+        CloseWindow();
+
+        return 0;
+}
+
+
+void Init() {
+
+        InitPlayer();
+        InitCenario();
+
+}
+
+void DesenhoPlayerMesas() {
+        if (player.y <= mesa1.y) player.DrawPlayer();
+        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
+        if (player.y > mesa1.y && player.y <= mesa2.y) player.DrawPlayer();
+
+        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
+        if (player.y > mesa2.y && player.y <= mesa3.y) player.DrawPlayer();
+
+        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
+        if (player.y > mesa3.y && player.y <= mesa7.y) player.DrawPlayer();
+
+        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesaJailson, 0, 492, WHITE);
+        if (player.y >= mesa7.y) player.DrawPlayer();
+}
+
+void DeterminarBackground() {
+        if (boss.etapa == 0 || boss.etapa == 1 || boss.etapa == 3) DrawTexture(background_SD, 0, 0, WHITE); // Fundo normal
+                      
+        else if (boss.etapa == 2) {
+                DrawTexturePro(spritesheet_choque, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
+        }
+        // 4 - Mapa K vazio
+        // 5 - Mapa K preenchido
+}
+
+void MudarEtapa() {
+        // CHICOTADA (1min)
+        if (boss.timer >= 3600 && boss.etapa == 0) {
+                boss.etapa = 1;
+                boss.timer = 0;
+        }
+        // CONTAGEM (3seg)
+        if (boss.timer >= 240 && boss.etapa == 1) {
+                boss.etapa = 2;
+                boss.timer = 0;
+        }
+        // CHOQUE (5seg)
+        if (boss.timer >= 300 && boss.etapa == 2) {
+                boss.etapa = 3;
+                boss.timer = 0;
+        }
+        // MESAS VAZIAS (20seg)
+        if (boss.timer >= 600 && boss.etapa == 3) {
+
+        }
+
+        // 15 segundos mostrando a equação + 5 segundos mostrando Mapa K
+        if (boss.timer >= 1200 && boss.etapa == 2) {
+                /*
+
+                se o player estiver em lugar seguro e com vida maior que 0 -> tela de vitória
+                se o player estiver em lugar inseguro ou com vida menor que 0 -> tela de derrota
+
+                */
+        }
+}
+
+void Etapas() {
+        // Choque
+        if (boss.etapa == 2) {
+                if (player.EntreMesas()) {
+                        player.vivo = false;
+                }
+        }
+}
+
+void Liberar() {
+        UnloadTexture(spritesheet_choque);
+        UnloadTexture(background_SD);
+        UnloadTexture(mesaJailson);
+        UnloadTexture(player.playerUP);
+        UnloadTexture(player.playerUP_L);
+        UnloadTexture(player.playerUP_R);
+        UnloadTexture(player.playerDOWN);
+        UnloadTexture(player.playerDOWN_L);
+        UnloadTexture(player.playerDOWN_R);
+        UnloadTexture(player.playerRIGHT);
+        UnloadTexture(player.playerRIGHT_L);
+        UnloadTexture(player.playerRIGHT_R);
+        UnloadTexture(player.playerLEFT);
+        UnloadTexture(player.playerLEFT_L);
+        UnloadTexture(player.playerLEFT_R);
+        UnloadTexture(mesa1.texture);
+        UnloadTexture(mesa2.texture);
+        UnloadTexture(mesa3.texture);
+        UnloadTexture(mesa4.texture);
+        UnloadTexture(mesa5.texture);
+        UnloadTexture(mesa6.texture);
+        UnloadTexture(mesa7.texture);
+
+
+        UnloadImage(background_SD_img);
+        UnloadImage(mesaJailson_img);
+        UnloadImage(player.playerUP_img);
+        UnloadImage(player.playerUP_L_img);
+        UnloadImage(player.playerUP_R_img);
+        UnloadImage(player.playerDOWN_img);
+        UnloadImage(player.playerDOWN_L_img);
+        UnloadImage(player.playerDOWN_R_img);
+        UnloadImage(player.playerRIGHT_img);
+        UnloadImage(player.playerRIGHT_L_img);
+        UnloadImage(player.playerRIGHT_R_img);
+        UnloadImage(player.playerLEFT_img);
+        UnloadImage(player.playerLEFT_L_img);
+        UnloadImage(player.playerLEFT_R_img);
+        UnloadImage(mesa1.img);
+        UnloadImage(mesa2.img);
+        UnloadImage(mesa3.img);
+        UnloadImage(mesa4.img);
+        UnloadImage(mesa5.img);
+        UnloadImage(mesa6.img);
+        UnloadImage(mesa7.img);
+}
+
+void InitPlayer() {
+
+        // VARIÁVEIS ================= //
         player.x = Hres / 2;
         player.y = Vres / 2;
         player.dash_t = 0;
@@ -65,30 +247,7 @@ void init() {
         // ============================ //
 
 
-        // BACKGROUND =========================================== //
-        background_SD_img = LoadImage("assets/backSD.png");
-        ImageResize(&background_SD_img, Hres, Vres);
-        background_SD = LoadTextureFromImage(background_SD_img);
-
-        spritesheet_choque = LoadTexture("assets/backSDchoque.png");
-        sourceRec = { 0.0f, 0.0f, 540.0f, 360.0f };
-        destRec = { 0.0f, 0.0f, Hres, Vres };
-        currentFrame = 0;
-        frameCounter = 0;
-        frameDelay = 15;
-        // ====================================================== //
-
-
-        // MESA JAILSON ========================================= //
-        mesaJailson_img = LoadImage("assets/mesaJailson.png");
-        mesaJailson = LoadTextureFromImage(mesaJailson_img);
-        mesaJailson.width *= 2;
-        mesaJailson.height *= 2;
-        // ====================================================== //
-
-
-
-        // SPRITES DO PLAYER ============================================= //
+        // SPRITES =========================================================== //
 
         // Player andando para cima
         player.playerUP_img = LoadImage("assets/playercima.png");
@@ -141,194 +300,79 @@ void init() {
         player.playerRIGHT_L = LoadTextureFromImage(player.playerRIGHT_L_img);
         player.playerRIGHT_R = LoadTextureFromImage(player.playerRIGHT_R_img);
 
-
         player.playerLEFT = LoadTextureFromImage(player.playerLEFT_img);
         player.playerLEFT_L = LoadTextureFromImage(player.playerLEFT_L_img);
         player.playerLEFT_R = LoadTextureFromImage(player.playerLEFT_R_img);
 
         // ====================================================================== //
+}
+
+void InitCenario() {
+
+        // BACKGROUND =========================================== //
+        background_SD_img = LoadImage("assets/backSD.png");
+        ImageResize(&background_SD_img, Hres, Vres);
+        background_SD = LoadTextureFromImage(background_SD_img);
+
+        spritesheet_choque = LoadTexture("assets/backSDchoque.png");
+        sourceRec = { 0.0f, 0.0f, 540.0f, 360.0f };
+        destRec = { 0.0f, 0.0f, Hres, Vres };
+        currentFrame = 0;
+        frameCounter = 0;
+        frameDelay = 15;
+        // ====================================================== //
 
 
+        // MESA JAILSON ========================================= //
+        mesaJailson_img = LoadImage("assets/mesaJailson.png");
+        mesaJailson = LoadTextureFromImage(mesaJailson_img);
+        mesaJailson.width *= 2;
+        mesaJailson.height *= 2;
+        // ====================================================== //
 
-        // MESAS HW ----------------------------------------- //
+
+        // MESAS HW ============================================= //
         mesa1.texture = LoadTextureFromImage(mesa1.img);
         mesa1.texture.width *= 2;
         mesa1.texture.height *= 2;
         mesa1.x = 156;
         mesa1.y = 168;
 
-        mesa2.texture = LoadTextureFromImage(mesa1.img);
+        mesa2.texture = LoadTextureFromImage(mesa2.img);
         mesa2.texture.width *= 2;
         mesa2.texture.height *= 2;
         mesa2.x = 106;
         mesa2.y = 274;
 
-        mesa3.texture = LoadTextureFromImage(mesa1.img);
+        mesa3.texture = LoadTextureFromImage(mesa3.img);
         mesa3.texture.width *= 2;
         mesa3.texture.height *= 2;
         mesa3.x = 56;
         mesa3.y = 382;
 
-        mesa4.texture = LoadTextureFromImage(mesa1.img);
+        mesa4.texture = LoadTextureFromImage(mesa4.img);
         mesa4.texture.width *= 2;
         mesa4.texture.height *= 2;
         mesa4.x = 726;
         mesa4.y = 168;
 
-        mesa5.texture = LoadTextureFromImage(mesa1.img);
+        mesa5.texture = LoadTextureFromImage(mesa5.img);
         mesa5.texture.width *= 2;
         mesa5.texture.height *= 2;
         mesa5.x = 676;
         mesa5.y = 274;
 
-        mesa6.texture = LoadTextureFromImage(mesa1.img);
+        mesa6.texture = LoadTextureFromImage(mesa6.img);
         mesa6.texture.width *= 2;
         mesa6.texture.height *= 2;
         mesa6.x = 626;
         mesa6.y = 382;
 
-        mesa7.texture = LoadTextureFromImage(mesa1.img);
+        mesa7.texture = LoadTextureFromImage(mesa7.img);
         mesa7.texture.width *= 2;
         mesa7.texture.height *= 2;
         mesa7.x = 576;
         mesa7.y = 492;
 
-        // ------------------------------------------------------ //
-}
-
-
-int main() {
-
-        InitWindow(Hres, Vres, "Boss SD");
-        SetTargetFPS(60);
-
-        init();
-
-        while (!WindowShouldClose()) {
-
-                player.UpdatePlayer(boss.fase);
-
-                frameCounter++;
-                if (frameCounter >= frameDelay) {
-                        frameCounter = 0;
-                        currentFrame = (currentFrame + 1) % 2;
-                        sourceRec.x = (float)(currentFrame * 540.0f);
-                }
-                boss.timer++;
-
-                BeginDrawing();
-
-                        ClearBackground(BLACK);
-
-                        
-
-                        // DETERMINAR BACKGROUND ====================================================== //
-                        if (boss.fase == 0 || boss.fase == 1 || boss.fase == 3) DrawTexture(background_SD, 0, 0, WHITE); // Fundo normal
-
-                        /*
-                        else if (boss.fase == 2) { // Fundo choque computadores
-                                Texture2D Background = LoadTexture("assets/backSDChoque.png");
-                                if (BackGroundFramesCounter >= (60/BAckGroundFrameSpeed)){
-                                        BackGroundFramesCounter = 0;
-                                        BackGroundCourrentFrame++;
-                                        if (BackGroundCourrentFrame > 1){
-                                                BackGroundCourrentFrame = 0;
-                                        }
-
-                                        BackgroundFrameRec.x = (float)BackGroundCourrentFrame * ((float)(1080/2));
-                                }
-                                DrawTextureRec(Background, BackgroundFrameRec, BackgroundPosition, WHITE);
-                        
-                                
-                                
-                        }
-                        */
-                      
-                        else if (boss.fase == 2) {
-                                DrawTexturePro(spritesheet_choque, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
-                        }
-                        // 4 - Mapa K vazio
-                        // 5 - Mapa K preenchido
-
-                        // =========================================================================== //
-
-
-
-
-
-
-                        // DETERMINANDO A ORDEM COM A QUAL DEVEMOS DESENHAR O PLAYER ========= //
-                        if (player.y <= mesa1.y) player.DrawPlayer();
-                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
-                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
-                        if (player.y > mesa1.y && player.y <= mesa2.y) player.DrawPlayer();
-
-                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
-                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
-                        if (player.y > mesa2.y && player.y <= mesa3.y) player.DrawPlayer();
-
-                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
-                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
-                        if (player.y > mesa3.y && player.y <= mesa7.y) player.DrawPlayer();
-
-                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
-                        if (boss.fase == 0 || boss.fase == 1) DrawTexture(mesaJailson, 0, 492, WHITE);
-                        if (player.y >= mesa7.y) player.DrawPlayer();
-                        // ================================================================= //
-
-
-
-                        boss.DrawSD();
-
-
-                        boss.AtaqueSD();
-
-
-
-
-                        // MUDANÇA DE ETAPA DA FASE ===================================================== //
-
-                        // CHICOTADA (1min)
-                        if (boss.timer >= 3600 && boss.fase == 0) {
-                                boss.fase = 1;
-                                boss.timer = 0;
-                        }
-                        // CONTAGEM (3seg)
-                        if (boss.timer >= 240 && boss.fase == 1) {
-                                boss.fase = 2;
-                                boss.timer = 0;
-                        }
-                        // CHOQUE (5seg)
-                        if (boss.timer >= 300 && boss.fase == 2) {
-                                boss.fase = 3;
-                                boss.timer = 0;
-                        }
-                        // MESAS VAZIAS (20seg)
-                        if (boss.timer >= 600 && boss.fase == 3) {
-
-                        }
-
-                        // 15 segundos mostrando a equação + 5 segundos mostrando Mapa K
-                        if (boss.timer >= 1200 && boss.fase == 2) {
-                                /*
-
-                                se o player estiver em lugar seguro e com vida maior que 0 -> tela de vitória
-                                se o player estiver em lugar inseguro ou com vida menor que 0 -> tela de derrota
-
-                                */
-                        }
-                        //=============================================================================== //
-
-
-
-                        // Posição do player (tirar depois)
-                        std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
-
-                EndDrawing();
-        }
-
-        UnloadTexture(spritesheet_choque);
-        CloseWindow();
-
-        return 0;
+        // ===================================================== //
 }

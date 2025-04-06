@@ -30,6 +30,7 @@ public:
     void DrawPlayer();
     bool CollisionMesas();
     void UpdatePlayer(int i);
+    bool EntreMesas();
     Image playerUP_img, playerUP_L_img, playerUP_R_img;
     Image playerDOWN_img, playerDOWN_L_img, playerDOWN_R_img;
     Image playerRIGHT_img, playerRIGHT_L_img, playerRIGHT_R_img;
