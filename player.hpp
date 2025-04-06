@@ -20,6 +20,7 @@ public:
     int lastPos; // 0 - UP // 1 - DOWN // 2 - LEFT // 3 - RIGHT
     float vida;
     bool vivo;
+    bool ganhou;
 
     Texture2D playerUP, playerUP_R, playerUP_L;
     Texture2D playerDOWN, playerDOWN_R, playerDOWN_L;

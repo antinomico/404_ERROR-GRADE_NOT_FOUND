@@ -15,6 +15,7 @@ Player::Player() {
     speed_dash = 10;
     vida = 100.0f;
     vivo = true;
+    ganhou = false;
 };
 
 Player::~Player() {};

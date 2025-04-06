@@ -8,6 +8,13 @@
 #define Hres 1080
 #define Vres 720
 
+/*
+Texto para iniciar a fase:
+
+Agora xxxxx precisa enfrentar o terror das quintas-feiras: o laboratório de hardware!
+Lembre de pegar a caixa de fios de Jailson para poder combater o boss!
+*/
+
 
 // FUNÇÕES ================= //
 void Init();
@@ -16,6 +23,9 @@ void DeterminarBackground();
 void MudarEtapa();
 void Etapas();
 void Liberar();
+void InitPlayer();
+void InitCenario();
+void VitoriaOuDerrota();
 // ========================== //
 
 
@@ -26,10 +36,12 @@ Texture2D background_SD;
 Texture2D mesas_SD;
 Texture2D mesaJailson;
 Texture2D spritesheet_choque;
+Texture2D background_SD_MapaK_Vazio;
 
 Image background_SD_img;
 Image mesas_SD_img;
 Image mesaJailson_img;
+Image background_SD_MapaK_Vazio_img;
 
 Rectangle sourceRec;
 Rectangle destRec;
@@ -88,13 +100,7 @@ int main() {
                         boss.AtaqueSD();
                         MudarEtapa();
                         Etapas();
-
-
-                        if (player.vivo == false) {
-                                // Ir para tela de derrota
-                                DrawText("MORREU", 360, 100, 30, RED); // Para debug
-                        }
-
+                        VitoriaOuDerrota();
 
                         // Posição do player (tirar depois)
                         std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
@@ -138,42 +144,37 @@ void DesenhoPlayerMesas() {
 void DeterminarBackground() {
         if (boss.etapa == 0 || boss.etapa == 1 || boss.etapa == 3) DrawTexture(background_SD, 0, 0, WHITE); // Fundo normal
                       
-        else if (boss.etapa == 2) {
-                DrawTexturePro(spritesheet_choque, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
-        }
-        // 4 - Mapa K vazio
-        // 5 - Mapa K preenchido
+        else if (boss.etapa == 2)  DrawTexturePro(spritesheet_choque, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
+
+        else if (boss.etapa == 4) DrawTexture(background_SD_MapaK_Vazio, 0, 0, WHITE);
+
 }
 
 void MudarEtapa() {
-        // CHICOTADA (1min)
+        // CHICOTADA (1min) -> CONTAGEM
         if (boss.timer >= 3600 && boss.etapa == 0) {
                 boss.etapa = 1;
                 boss.timer = 0;
         }
-        // CONTAGEM (3seg)
+        // CONTAGEM (3seg) -> CHOQUE
         if (boss.timer >= 240 && boss.etapa == 1) {
                 boss.etapa = 2;
                 boss.timer = 0;
         }
-        // CHOQUE (5seg)
+        // CHOQUE (5seg) -> SEM MESAS
         if (boss.timer >= 300 && boss.etapa == 2) {
                 boss.etapa = 3;
                 boss.timer = 0;
         }
-        // MESAS VAZIAS (20seg)
-        if (boss.timer >= 600 && boss.etapa == 3) {
-
+        // SEM MESAS (5seg) -> MAPA K VAZIO
+        if (boss.timer >= 300 && boss.etapa == 3) {
+                boss.etapa = 4;
+                boss.timer = 0;
         }
-
-        // 15 segundos mostrando a equação + 5 segundos mostrando Mapa K
-        if (boss.timer >= 1200 && boss.etapa == 2) {
-                /*
-
-                se o player estiver em lugar seguro e com vida maior que 0 -> tela de vitória
-                se o player estiver em lugar inseguro ou com vida menor que 0 -> tela de derrota
-
-                */
+        // MAPA K VAZIO (15seg) -> MAPA K PREENCHIDO
+        if (boss.timer >= 900 && boss.etapa == 4) {
+                boss.etapa = 5;
+                boss.timer = 0;
         }
 }
 
@@ -314,6 +315,10 @@ void InitCenario() {
         ImageResize(&background_SD_img, Hres, Vres);
         background_SD = LoadTextureFromImage(background_SD_img);
 
+        background_SD_MapaK_Vazio_img = LoadImage("assets/backSDMapaVazio.png");
+        ImageResize(&background_SD_MapaK_Vazio_img, Hres, Vres);
+        background_SD_MapaK_Vazio = LoadTextureFromImage(background_SD_MapaK_Vazio_img);
+
         spritesheet_choque = LoadTexture("assets/backSDchoque.png");
         sourceRec = { 0.0f, 0.0f, 540.0f, 360.0f };
         destRec = { 0.0f, 0.0f, Hres, Vres };
@@ -375,4 +380,16 @@ void InitCenario() {
         mesa7.y = 492;
 
         // ===================================================== //
+}
+
+void VitoriaOuDerrota() {
+        if (player.vivo == false) {
+                // Ir para tela de derrota
+                DrawText("MORREU", 360, 100, 30, RED); // Para debug
+        }
+
+        if (player.ganhou == true) {
+                // Ir para tela de vitória
+                DrawText("GANHOU", 360, 100, 30, RED); // Para debug
+        }
 }
