@@ -34,7 +34,7 @@ void BossSD::AtaqueSD(Player P, chicote* vec) {
 		Chicotada(P,vec);
 	}
 	else if (etapa == 1) ContagemChoque();
-	else if (etapa == 5) ContagemMapaK();
+	else if (etapa == 4) ContagemMapaK();
 
 }
 
@@ -107,30 +107,6 @@ void BossSD::ContagemChoque(){
 		etapa = 2;
 	}
 
-	timer_choque++;
-}
-
-void BossSD::ContagemChoque(){
-
-	if (timer_choque >= 0 && timer_choque < 60) {
-		DrawText("CHOQUE NAS MESAS EM 3", 235, 80, 50, RED);
-	}
-
-	else if (timer_choque >= 60 && timer_choque < 120) {
-		DrawText("CHOQUE NAS MESAS EM 2", 235, 80, 50, RED);
-	}
-
-	else if (timer_choque >= 120 && timer_choque < 180) {
-		DrawText("CHOQUE NAS MESAS EM 1", 235, 80, 50, RED);
-	}
-
-	else if (timer_choque >= 180 && timer_choque < 240) {
-		DrawText("CHOQUE NAS MESAS EM 0", 235, 80, 50, RED);
-
-	}
-	else if (timer_choque >= 240) {
-		etapa = 2;
-	}
 	timer_choque++;
 }
 

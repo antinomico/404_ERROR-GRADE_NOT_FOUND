@@ -63,6 +63,7 @@ int frameDelayChoque;
 int currentFrameFinal;
 int frameCounterFinal;
 int frameDelayFinal;
+
 // =============================== //
 
 
@@ -109,8 +110,11 @@ int main() {
                         Etapas();
                         VitoriaOuDerrota();
 
+                        std::cout << "TIMER: " << boss.timer << std::endl;
+                        std::cout << "ETAPA: " << boss.etapa << std::endl;
+
                         // Posição do player (tirar depois)
-                        std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
+                        //std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
 
                 EndDrawing();
         }
@@ -161,7 +165,9 @@ void DeterminarBackground() {
 
         else if (boss.etapa == 4) DrawTexture(background_SD_MapaK_Vazio, 0, 0, WHITE);
 
+        
         else if (boss.etapa == 5) DrawTexturePro(spritesheet_final, sourceRecFinal, destRecFinal, {0, 0}, 0.0f, WHITE);
+
 
 }
 
@@ -191,6 +197,7 @@ void MudarEtapa() {
                 boss.etapa = 5;
                 boss.timer = 0;
         }
+                
 }
 
 void Etapas() {
@@ -201,7 +208,7 @@ void Etapas() {
                 }
         }
 
-        if (boss.etapa = 3) {
+        if (boss.etapa == 3) {
                 if (boss.timer < 30) {
                         
                 }
@@ -252,6 +259,7 @@ void Etapas() {
 
 
         }
+        
 }
 
 void Liberar() {
@@ -396,6 +404,7 @@ void InitCenario() {
         frameCounterChoque = 0;
         frameDelayChoque = 15;
 
+        
         spritesheet_final = LoadTexture("assets/backSDfinal.png");
         sourceRecFinal = { 0.0f, 0.0f, 540.0f, 360.0f };
         destRecFinal = { 0.0f, 0.0f, Hres, Vres };
@@ -491,4 +500,6 @@ void GIFsBack() {
                 currentFrameFinal = (currentFrameFinal + 1) % 2;
                 sourceRecFinal.x = (float)(currentFrameFinal * 540.0f); 
         }
+
+        
 }
