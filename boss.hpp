@@ -16,8 +16,8 @@ public:
 	void DrawSD();
 	void AtaqueSD(Player P, chicote* vec);
 	void Chicotada(Player P, chicote* vec);
-	void Contagem();
-	void MapaK();
+	void ContagemChoque();
+	void ContagemMapaK();
 	Vector2 positionSD;
 	int timer_chicotada;
 	int timer;
