@@ -114,7 +114,7 @@ int main() {
                         std::cout << "ETAPA: " << boss.etapa << std::endl;
 
                         // Posição do player (tirar depois)
-                        //std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
+                        std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
 
                 EndDrawing();
         }
