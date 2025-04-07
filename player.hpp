@@ -3,12 +3,12 @@
 #include "mesaHW.hpp"
 
 class Player {
-
+    
 public:
 
-        Player();
+	Player();
 
-        ~Player();
+	~Player();
 
     float x, y;
     float largura;
@@ -37,8 +37,5 @@ public:
     Image playerRIGHT_img, playerRIGHT_L_img, playerRIGHT_R_img;
     Image playerLEFT_img, playerLEFT_L_img, playerLEFT_R_img;
 
-
+    
 };
-
-
-

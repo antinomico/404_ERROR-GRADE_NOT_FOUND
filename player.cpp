@@ -39,7 +39,10 @@ void Player::UpdatePlayer(int i) {
 
     if (dash_t > 10) dash_t++;  // Se o timer do dash for maior que 10, o player terá que esperar o timer chegar a 150 para poder usá-lo de novo
     if (dash_t >= 150) dash_t = 0; // Reset do timer do dash
-// ============================== CIMA ================================ //
+
+
+
+    // ============================== CIMA ================================ //
     if (IsKeyDown(KEY_W)) {
 
         lastPos = 0;
@@ -60,7 +63,7 @@ void Player::UpdatePlayer(int i) {
 
         // SPRITE ================================================ //
         if (frameCounter >= 60/frameSpeed) {
-
+            
             frameCounter = 0;
             currentFrame++;
 
@@ -72,9 +75,12 @@ void Player::UpdatePlayer(int i) {
             else if (currentFrame == 3) playerNOW = playerUP;
         }
     }
-// ========================= ESQUERDA ======================== //
-    else if (IsKeyDown(KEY_A)) {
 
+
+
+    // ========================= ESQUERDA ======================== //
+    if (IsKeyDown(KEY_A)) {
+        
         lastPos = 2;
         // POSIÇÃO ======================================== //
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))
@@ -85,11 +91,11 @@ void Player::UpdatePlayer(int i) {
         }
         else x -= speed;
         qtdMovX -= speed;
-
+    
 
         // SPRITE ================================================ //
         if (frameCounter >= 60/frameSpeed) {
-
+                
             frameCounter = 0;
             currentFrame++;
 
@@ -102,8 +108,9 @@ void Player::UpdatePlayer(int i) {
         }
 
     }
-// =========================== BAIXO ============================= //
-    else if (IsKeyDown(KEY_S)) {
+
+    // =========================== BAIXO ============================= //
+    if (IsKeyDown(KEY_S)) {
         lastPos = 1;
         // POSIÇÃO ===================================== //
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))
@@ -123,7 +130,7 @@ void Player::UpdatePlayer(int i) {
 
         // SPRITE ================================================ //
         if (frameCounter >= 60/frameSpeed) {
-
+            
             frameCounter = 0;
             currentFrame++;
 
@@ -136,8 +143,10 @@ void Player::UpdatePlayer(int i) {
         }
     }
 
-// ============================ DIREITA ================================= //
-    else if (IsKeyDown(KEY_D)) {
+
+
+    // ============================ DIREITA ================================= //
+    if (IsKeyDown(KEY_D)) {
         lastPos = 3;
         // POSIÇÃO =============================================== //
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
@@ -152,7 +161,7 @@ void Player::UpdatePlayer(int i) {
 
         // SPRITE ================================================ //
         if (frameCounter >= 60/frameSpeed) {
-
+            
             frameCounter = 0;
             currentFrame++;
 
@@ -173,8 +182,9 @@ void Player::UpdatePlayer(int i) {
         else if (lastPos == 2) playerNOW = playerLEFT;
         else if (lastPos == 3) playerNOW = playerRIGHT;
     }
-// ================================= COLISÕES ======================================= //
 
+    // ================================= COLISÕES ======================================= //
+    
     // Bordas
     if (x <= 0) x = 0;
     if (x >= Hres - largura) x = Hres - largura;
@@ -200,10 +210,3 @@ bool Player::EntreMesas() {
     if ((x <= ((-0.4739f * y) + 549.193f) || x >= ((-0.4785f * y) + 802.222f)) && (y >= 160.539f)) return true;
     else return false;
 }
-
-
-
-
-
-
-

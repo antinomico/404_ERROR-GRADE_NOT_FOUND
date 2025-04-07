@@ -9,11 +9,11 @@
 
 
 MesaHW::MesaHW() {
-        img = LoadImage("assets/mesaHW.png");
+	img = LoadImage("assets/mesaHW.png");
 }
 
 MesaHW::~MesaHW() {
-        UnloadImage(img);
+	UnloadImage(img);
 }
 
 bool collide(float x, float y)
@@ -25,7 +25,7 @@ bool collide(float x, float y)
         else if ((740 <= x && x <= 1021)&& (163 <= y && y <= 168)) return true;
 
         else if ((0 <= x && x <= 445) && (270 <= y && y <= 275)) return true;
-        else if ((664 <= x && x <= 999)&& (269 <= y && y <= 287)) return true;
+        else if ((664 <= x && x <= 999)&& (269 <= y && y <= 287)) return true; 
 
         else if ((0  <= x && x <= 400) && (380 <= y && y <= 385)) return true;
         else if ((640 <= x && x <= 930) && (364 <= y && y <= 387)) return true;
@@ -33,4 +33,3 @@ bool collide(float x, float y)
         else return false;
 
 }
-

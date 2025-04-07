@@ -27,6 +27,10 @@ void InitPlayer();
 void InitCenario();
 void VitoriaOuDerrota();
 // ========================== //
+
+
+
+
 // VARIÁVEIS INICIAIS ============ //
 chicote vec;
 Texture2D background_SD;
@@ -64,6 +68,10 @@ MesaHW mesa1,
        mesa6,
        mesa7;
 // ================================= //
+
+
+
+
 int main() {
 
         InitWindow(Hres, Vres, "Boss SD");
@@ -90,7 +98,7 @@ int main() {
                         DeterminarBackground();
                         DesenhoPlayerMesas();
                         boss.DrawSD();
-                        //boss.Chicotada(player, &vec);
+			//boss.Chicotada(player, &vec);
                         boss.AtaqueSD(player, &vec);
                         MudarEtapa();
                         Etapas();
@@ -107,16 +115,18 @@ int main() {
 
         return 0;
 }
+
+
 void Init() {
 
         InitPlayer();
         InitCenario();
-        vec.reverse = 1;
-        vec.cx = boss.positionSD.x;
-        vec.cy = boss.positionSD.y;
-        vec.dex = player.x;
-        vec.dey = player.y;
-        boss.timer_chicotada = 0;
+	vec.reverse = 1;
+	vec.cx = boss.positionSD.x;
+	vec.cy = boss.positionSD.y;
+	vec.dex = player.x;
+	vec.dey = player.y;
+	boss.timer_chicotada = 0;
 
 }
 
@@ -141,15 +151,16 @@ void DesenhoPlayerMesas() {
 
 void DeterminarBackground() {
         if (boss.etapa == 0 || boss.etapa == 1 || boss.etapa == 3) DrawTexture(background_SD, 0, 0, WHITE); // Fundo normal
-
+                      
         else if (boss.etapa == 2)  DrawTexturePro(spritesheet_choque, sourceRec, destRec, {0, 0}, 0.0f, WHITE);
 
         else if (boss.etapa == 4) DrawTexture(background_SD_MapaK_Vazio, 0, 0, WHITE);
 
 }
+
 void MudarEtapa() {
         // CHICOTADA (1min) -> CONTAGEM
-        if (boss.timer >= 3600 && boss.etapa == 0) {
+        if (boss.timer >= 500 && boss.etapa == 0) {
                 boss.etapa = 1;
                 boss.timer = 0;
         }
@@ -183,6 +194,7 @@ void Etapas() {
                 }
         }
 }
+
 void Liberar() {
         UnloadTexture(spritesheet_choque);
         UnloadTexture(background_SD);
@@ -303,6 +315,7 @@ void InitPlayer() {
 
         // ====================================================================== //
 }
+
 void InitCenario() {
 
         // BACKGROUND =========================================== //
@@ -376,6 +389,7 @@ void InitCenario() {
 
         // ===================================================== //
 }
+
 void VitoriaOuDerrota() {
         if (player.vivo == false) {
                 // Ir para tela de derrota

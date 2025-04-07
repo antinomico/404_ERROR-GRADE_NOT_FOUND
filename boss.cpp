@@ -7,38 +7,41 @@
 #define Vres 720
 
 BossSD::BossSD() {
-        positionSD.x = Hres / 2 - 25;
-        positionSD.y = 200;
-        etapa = 0; // Inicia na fase da chicotada
-        timer = 0;
-        timer_chicotada = 0;
-        timer_choque = 0;
+	positionSD.x = Hres / 2 - 25;
+	positionSD.y = 200;
+	etapa = 0; // Inicia na fase da chicotada
+	timer = 0;
+	timer_chicotada = 0;
+	timer_choque = 0;
+	n_chicotada = 0;
 
-        //spriteBoss = LoadTexture("");
+	//spriteBoss = LoadTexture("");
 }
 
 BossSD::~BossSD() {
-        //UnloadTexture(spriteBoss);
+	//UnloadTexture(spriteBoss);
 }
 
 void BossSD::DrawSD() {
     DrawRectangle(585, 148, 50, 50, BLUE);
-        //DrawTexture(spriteBoss, 0, 0, WHITE);
+	//DrawTexture(spriteBoss, 0, 0, WHITE);
 }
 
 
 void BossSD::AtaqueSD(Player P, chicote* vec) {
 
-        if (etapa == 0) Chicotada(P,vec);
-        else if (etapa == 1) Contagem();
-        else if (etapa == 5) MapaK();
+	if (etapa == 0){ 
+		Chicotada(P,vec);
+	}
+	else if (etapa == 1) Contagem();
+	else if (etapa == 5) MapaK();
 
 }
 
 // Fazer chicotada por 1min (?)
 // A cada x segundos, o boss dá uma chicotada alternando entre cima, baixo, esquerda e direita, e o player precisa se esquivar e tentar atacar o boss
 void BossSD::Chicotada(Player P, chicote* vec){
-        if (timer_chicotada == 0 && vec->reverse == 0) {
+	if (timer_chicotada == 0 && vec->reverse == 0) {
         float dx = vec->dex - positionSD.x;
         float dy = vec->dey - positionSD.y;
 
@@ -76,37 +79,37 @@ void BossSD::Chicotada(Player P, chicote* vec){
             vec->cy = positionSD.y;
             vec->dex = P.x;
             vec->dey = P.y;
-            if (timer_chicotada >= 30) {timer_chicotada = 0; vec->reverse = 0; }
+            if (timer_chicotada >= 30) {timer_chicotada = 0; vec->reverse = 0; n_chicotada++;}
     }
 
 }
+
+
 void BossSD::Contagem(){
 
-        if (timer_choque >= 0 && timer_choque < 60) {
-                DrawText("CHOQUE NAS MESAS EM 3", 235, 80, 50, RED);
-        }
+	if (timer_choque >= 0 && timer_choque < 60) {
+		DrawText("CHOQUE NAS MESAS EM 3", 235, 80, 50, RED);
+	}
 
-        else if (timer_choque >= 60 && timer_choque < 120) {
-                DrawText("CHOQUE NAS MESAS EM 2", 235, 80, 50, RED);
-        }
+	else if (timer_choque >= 60 && timer_choque < 120) {
+		DrawText("CHOQUE NAS MESAS EM 2", 235, 80, 50, RED);
+	}
 
-        else if (timer_choque >= 120 && timer_choque < 180) {
-                DrawText("CHOQUE NAS MESAS EM 1", 235, 80, 50, RED);
-        }
+	else if (timer_choque >= 120 && timer_choque < 180) {
+		DrawText("CHOQUE NAS MESAS EM 1", 235, 80, 50, RED);
+	}
 
-        else if (timer_choque >= 180 && timer_choque < 240) {
-                DrawText("CHOQUE NAS MESAS EM 0", 235, 80, 50, RED);
+	else if (timer_choque >= 180 && timer_choque < 240) {
+		DrawText("CHOQUE NAS MESAS EM 0", 235, 80, 50, RED);
 
-        }
-        else if (timer_choque >= 240) {
-                etapa = 2;
-        }
+	}
+	else if (timer_choque >= 240) {
+		etapa = 2;
+	}
 
-        timer_choque++;
+	timer_choque++;
 }
 
 void BossSD::MapaK(){
 
 }
-
-
