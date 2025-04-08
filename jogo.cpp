@@ -135,6 +135,11 @@ int main() {
                         std::cout << "TIMER: " << boss.timer << std::endl;
                         std::cout << "ETAPA: " << boss.etapa << std::endl;
 
+<<<<<<< HEAD
+=======
+                        // Posição do player (tirar depois)
+                        std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
+>>>>>>> 411e31ce602c37763244162ef3ac3e8595f8066d
 
                 EndDrawing();
         }

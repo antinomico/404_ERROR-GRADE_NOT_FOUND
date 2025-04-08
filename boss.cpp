@@ -7,8 +7,8 @@
 #define Vres 720
 
 BossSD::BossSD() {
-	positionSD.x = Hres / 2 - 25;
-	positionSD.y = 200;
+	positionSD.x = 588;
+	positionSD.y = 115;
 	etapa = 0; // Inicia na fase da chicotada
 	timer = 0;
 	timer_chicotada = 0;
@@ -42,8 +42,8 @@ void BossSD::AtaqueSD(Player P, chicote* vec) {
 // A cada x segundos, o boss dá uma chicotada alternando entre cima, baixo, esquerda e direita, e o player precisa se esquivar e tentar atacar o boss
 void BossSD::Chicotada(Player P, chicote* vec){
 	if (timer_chicotada == 0 && vec->reverse == 0) {
-        float dx = vec->dex - positionSD.x;
-        float dy = vec->dey - positionSD.y;
+        float dx = -167;
+        float dy =  412;
 
         if (vec->cx <= positionSD.x && vec->cy <= positionSD.y) vec->reverse  = 0;
 
