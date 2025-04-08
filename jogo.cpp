@@ -127,6 +127,7 @@ int main() {
                         boss.DrawSD();
 			//boss.Chicotada(player, &vec);
                         boss.AtaqueSD(player, &vec);
+			if ((player.x - vec.cx)*(player.x - vec.cx) + (player.y - vec.cy)*(player.y - vec.cy) <= 2500) player.vivo = false;
                         Etapas();
                         MudarEtapa();
                         VitoriaOuDerrota();
