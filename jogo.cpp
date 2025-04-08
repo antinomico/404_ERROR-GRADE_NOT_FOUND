@@ -167,20 +167,20 @@ void Init() {
 
 void DesenhoPlayerMesas() {
         if (player.y <= mesa1.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
-        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
-        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
         if (player.y > mesa1.y && player.y <= mesa2.y && boss.etapa != 6 && boss.etapa != 7) player.DrawPlayer();
 
-        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
-        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
         if (player.y > mesa2.y && player.y <= mesa3.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
 
-        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
-        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
         if (player.y > mesa3.y && player.y <= mesa7.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
 
-        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
-        if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesaJailson, 0, 492, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesaJailson, 0, 492, WHITE);
         if (player.y >= mesa7.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
 }
 

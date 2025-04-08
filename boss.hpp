@@ -30,6 +30,7 @@ public:
 			   // 4 - MAPA K VAZIO 
 			   // 5 - MAPA K PREENCHIDO
 			   // 6 - TELA TRANSICAO
+			   // 7 - TELA DERROTA
 
 private:
 	Texture2D spriteSD;
