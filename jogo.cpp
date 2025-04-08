@@ -33,26 +33,37 @@ void GIFsBack();
 
 
 // VARIÁVEIS INICIAIS ============ //
-chicote vec;
 Texture2D background_SD;
 Texture2D mesas_SD;
 Texture2D mesaJailson;
-Texture2D spritesheet_choque;
 Texture2D background_SD_MapaK_Vazio;
+Texture2D tela_gameover_SD;
+
+Texture2D spritesheet_choque;
 Texture2D spritesheet_final;
-Texture2D equacao;
+Texture2D spritesheet_equacao;
 
 Image background_SD_img;
 Image mesas_SD_img;
 Image mesaJailson_img;
 Image background_SD_MapaK_Vazio_img;
-Image equacao_img;
+Image tela_gameover_SD_img;
 
 Rectangle sourceRecChoque;
 Rectangle destRecChoque;
 
+Rectangle sourceRecEquacao;
+Rectangle destRecEquacao;
+
 Rectangle sourceRecFinal;
 Rectangle destRecFinal;
+
+chicote vec;
+
+Sound som_choque;
+Sound som_jequiti;
+Sound som_vitoria;
+Sound som_gameover;
 
 float angle_deg = 24.9547f;
 
@@ -60,10 +71,21 @@ int currentFrameChoque;
 int frameCounterChoque;
 int frameDelayChoque;
 
+int currentFrameEquacao;
+int frameCounterEquacao;
+int frameDelayEquacao;
+
 int currentFrameFinal;
 int frameCounterFinal;
 int frameDelayFinal;
 
+int estadoAnterior;
+
+bool tocouChoque;
+bool tocouJequiti;
+bool tocouVitoria;
+bool tocouGameOver;
+bool foiZerado;
 // =============================== //
 
 
@@ -86,9 +108,6 @@ MesaHW mesa1,
 
 int main() {
 
-        InitWindow(Hres, Vres, "Boss SD");
-        SetTargetFPS(60);
-
         Init();
 
         while (!WindowShouldClose()) {
@@ -96,6 +115,8 @@ int main() {
                 player.UpdatePlayer(boss.etapa);
 
                 GIFsBack();
+
+                boss.timer++;
 
                 BeginDrawing();
 
@@ -106,28 +127,30 @@ int main() {
                         boss.DrawSD();
 			//boss.Chicotada(player, &vec);
                         boss.AtaqueSD(player, &vec);
-                        MudarEtapa();
                         Etapas();
+                        MudarEtapa();
                         VitoriaOuDerrota();
 
+                        // Para fins debuguísticos
                         std::cout << "TIMER: " << boss.timer << std::endl;
                         std::cout << "ETAPA: " << boss.etapa << std::endl;
 
-                        // Posição do player (tirar depois)
-                        //std::cout << "Posicao: " << player.x  << ", " << player.y << std::endl;
 
                 EndDrawing();
         }
 
         Liberar();
+        CloseAudioDevice();
         CloseWindow();
 
         return 0;
 }
 
-
 void Init() {
 
+        InitWindow(Hres, Vres, "Boss SD");
+        InitAudioDevice(); 
+        SetTargetFPS(60);
         InitPlayer();
         InitCenario();
 	vec.reverse = 1;
@@ -137,80 +160,126 @@ void Init() {
 	vec.dey = player.y;
 	boss.timer_chicotada = 0;
 
+        estadoAnterior = 0;
+
 }
 
 void DesenhoPlayerMesas() {
-        if (player.y <= mesa1.y) player.DrawPlayer();
+        if (player.y <= mesa1.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
         if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
         if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
-        if (player.y > mesa1.y && player.y <= mesa2.y) player.DrawPlayer();
+        if (player.y > mesa1.y && player.y <= mesa2.y && boss.etapa != 6 && boss.etapa != 7) player.DrawPlayer();
 
         if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
         if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
-        if (player.y > mesa2.y && player.y <= mesa3.y) player.DrawPlayer();
+        if (player.y > mesa2.y && player.y <= mesa3.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
 
         if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
         if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
-        if (player.y > mesa3.y && player.y <= mesa7.y) player.DrawPlayer();
+        if (player.y > mesa3.y && player.y <= mesa7.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
 
         if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
         if (boss.etapa == 0 || boss.etapa == 1) DrawTexture(mesaJailson, 0, 492, WHITE);
-        if (player.y >= mesa7.y) player.DrawPlayer();
+        if (player.y >= mesa7.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
 }
 
 void DeterminarBackground() {
-        if (boss.etapa == 0 || boss.etapa == 1 || boss.etapa == 3) DrawTexture(background_SD, 0, 0, WHITE); // Fundo normal
+        if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(background_SD, 0, 0, WHITE); // Fundo normal
                       
-        else if (boss.etapa == 2)  DrawTexturePro(spritesheet_choque, sourceRecChoque, destRecChoque, {0, 0}, 0.0f, WHITE);
+        else if (boss.etapa == 2 || (boss.etapa == 7 && boss.timer < 300 && estadoAnterior == 2)) DrawTexturePro(spritesheet_choque, sourceRecChoque, destRecChoque, {0, 0}, 0.0f, WHITE);
 
-        else if (boss.etapa == 4) DrawTexture(background_SD_MapaK_Vazio, 0, 0, WHITE);
+        else if (boss.etapa == 3 || (boss.etapa == 7 && boss.timer < 300 && estadoAnterior == 3)) DrawTexturePro(spritesheet_equacao, sourceRecEquacao, destRecEquacao, {0, 0}, 0.0f, WHITE);
 
-        
-        else if (boss.etapa == 5) DrawTexturePro(spritesheet_final, sourceRecFinal, destRecFinal, {0, 0}, 0.0f, WHITE);
+        else if (boss.etapa == 4 || (boss.etapa == 7 && boss.timer < 300 && estadoAnterior == 4)) DrawTexture(background_SD_MapaK_Vazio, 0, 0, WHITE);
 
+        else if (boss.etapa == 5 || (boss.etapa == 7 && boss.timer < 300 && estadoAnterior == 5)) DrawTexturePro(spritesheet_final, sourceRecFinal, destRecFinal, {0, 0}, 0.0f, WHITE);
 
+        // Vitoria
+        else if (boss.etapa == 6) DrawTexture(tela_gameover_SD, 0, 0, WHITE);
+
+        // Derrota
+        else if (boss.etapa == 7 && boss.timer >= 300) {
+                DrawTexture(tela_gameover_SD, 0, 0, WHITE);
+                boss.timer == 0;
+        }
 }
 
 void MudarEtapa() {
         // CHICOTADA (1min) -> CONTAGEM
         if (boss.timer >= 500 && boss.etapa == 0) {
+                estadoAnterior = 0;
                 boss.etapa = 1;
                 boss.timer = 0;
         }
         // CONTAGEM (3seg) -> CHOQUE
         if (boss.timer >= 240 && boss.etapa == 1) {
+                estadoAnterior = 1;
                 boss.etapa = 2;
                 boss.timer = 0;
         }
         // CHOQUE (5seg) -> SEM MESAS
         if (boss.timer >= 300 && boss.etapa == 2) {
+                estadoAnterior = 2;
                 boss.etapa = 3;
                 boss.timer = 0;
         }
         // SEM MESAS (5seg) -> MAPA K VAZIO
         if (boss.timer >= 300 && boss.etapa == 3) {
+                estadoAnterior = 3;
                 boss.etapa = 4;
                 boss.timer = 0;
         }
         // MAPA K VAZIO (15seg) -> MAPA K PREENCHIDO
-        if (boss.timer >= 900 && boss.etapa == 4) {
+        if (boss.timer >= 600 && boss.etapa == 4) {
+                estadoAnterior = 4;
                 boss.etapa = 5;
+                boss.timer = 0;
+        }
+        // MAPA K PREENCHIDO -> TELA TRANSICAO
+        if (boss.timer >= 180 && boss.etapa == 5 && player.ganhou == true) {
+                estadoAnterior = 5;
+                boss.etapa = 6;
+                boss.timer = 0;
+        }
+
+        // QUALQUER FASE -> TELA GAME OVER
+        if (player.vivo == false && foiZerado == false) {
+                estadoAnterior = boss.etapa;
+                foiZerado = true;
+                boss.etapa = 7;
                 boss.timer = 0;
         }
                 
 }
 
 void Etapas() {
+
         // Choque
         if (boss.etapa == 2) {
+
                 if (player.EntreMesas()) {
                         player.vivo = false;
                 }
+
+                if (tocouChoque == false) {
+                        PlaySound(som_choque);
+                        tocouChoque = true;
+                }
         }
 
+        // Mostrar equação
         if (boss.etapa == 3) {
                 if (boss.timer < 30) {
                         
+                }
+        }
+
+        // Contagem do Mapa K
+        if (boss.etapa == 4) {
+
+                if (tocouJequiti == false) {
+                        PlaySound(som_jequiti);
+                        tocouJequiti = true;
                 }
         }
 
@@ -247,7 +316,7 @@ void Etapas() {
                 // Quarto 1
                 else if ((player.y >= ((-0.008635f * player.x) + 469.671f)) &&
                          (player.x >= ((-0.21909f * player.y) + 723.879f)) &&
-                         (player.x <= ((-0.19657f * player.y) + 928.833))) {
+                         (player.x <= ((-0.19657f * player.y) + 928.833f))) {
                                 
                         player.ganhou = 1;
                 }
@@ -311,6 +380,10 @@ void Liberar() {
         UnloadImage(mesa5.img);
         UnloadImage(mesa6.img);
         UnloadImage(mesa7.img);
+
+
+        UnloadSound(som_choque);
+        UnloadSound(som_jequiti);
 }
 
 void InitPlayer() {
@@ -397,13 +470,16 @@ void InitCenario() {
         ImageResize(&background_SD_MapaK_Vazio_img, Hres, Vres);
         background_SD_MapaK_Vazio = LoadTextureFromImage(background_SD_MapaK_Vazio_img);
 
+        tela_gameover_SD_img = LoadImage("assets/gameover_sd.png");
+        ImageResize(&tela_gameover_SD_img, Hres, Vres);
+        tela_gameover_SD = LoadTextureFromImage(tela_gameover_SD_img);
+
         spritesheet_choque = LoadTexture("assets/backSDchoque.png");
         sourceRecChoque = { 0.0f, 0.0f, 540.0f, 360.0f };
         destRecChoque = { 0.0f, 0.0f, Hres, Vres };
         currentFrameChoque = 0;
         frameCounterChoque = 0;
         frameDelayChoque = 15;
-
         
         spritesheet_final = LoadTexture("assets/backSDfinal.png");
         sourceRecFinal = { 0.0f, 0.0f, 540.0f, 360.0f };
@@ -412,9 +488,15 @@ void InitCenario() {
         frameCounterFinal = 0;
         frameDelayFinal = 15;
 
-        equacao_img = LoadImage("assets/equacao.png");
-        ImageResize(&equacao_img, Hres, Vres);
-        equacao = LoadTextureFromImage(equacao_img);
+        spritesheet_equacao = LoadTexture("assets/equacao.png");
+        sourceRecEquacao = { 0.0f, 0.0f, 540.0f, 360.0f };
+        destRecEquacao = { 0.0f, 0.0f, Hres, Vres };
+        currentFrameEquacao = 0;
+        frameCounterEquacao = 0;
+        frameDelayEquacao = 15;
+
+
+        foiZerado = false;
         // ====================================================== //
 
 
@@ -470,17 +552,47 @@ void InitCenario() {
         mesa7.y = 492;
 
         // ===================================================== //
+
+
+
+        // ÁUDIOS ============================================== //
+        som_choque = LoadSound("assets/audio_choque.wav");
+        som_jequiti = LoadSound("assets/audio_jequiti.wav");
+        som_vitoria = LoadSound("assets/audio_vitoria.wav");
+        som_gameover = LoadSound("assets/audio_gameover.wav");
+
+        tocouChoque = false;
+        tocouJequiti = false;
+        tocouVitoria = false;
+        tocouGameOver = false;
+        // ===================================================== //
 }
 
 void VitoriaOuDerrota() {
         if (player.vivo == false) {
-                // Ir para tela de derrota
-                DrawText("MORREU", 360, 100, 30, RED); // Para debug
+
+                // Áudio de derrota
+                if (tocouGameOver == false) {
+                        PlaySound(som_gameover);
+                        tocouGameOver = true;
+                }
+
+                // Animação bonequinho dead
+
+                // Quando passar 5 segundos, tela de game over
         }
 
         if (player.ganhou == true) {
-                // Ir para tela de vitória
-                DrawText("GANHOU", 360, 100, 30, RED); // Para debug
+
+                // Áudio de vitória
+                if (tocouVitoria == false) {
+                        PlaySound(som_vitoria);
+                        tocouVitoria = true;
+                }
+
+                // Bonequinho vira GIF
+
+                // Quando passar cinco segundos, tela de vitória
         }
 }
 
@@ -491,14 +603,19 @@ void GIFsBack() {
                 currentFrameChoque = (currentFrameChoque + 1) % 2;
                 sourceRecChoque.x = (float)(currentFrameChoque * 540.0f);
         }
-        boss.timer++;
-
 
         frameCounterFinal++;
         if (frameCounterFinal > frameDelayFinal) {
                 frameCounterFinal = 0;
                 currentFrameFinal = (currentFrameFinal + 1) % 2;
                 sourceRecFinal.x = (float)(currentFrameFinal * 540.0f); 
+        }
+
+        frameCounterEquacao++;
+        if (frameCounterEquacao > frameDelayEquacao) {
+                frameCounterEquacao = 0;
+                currentFrameEquacao = (currentFrameEquacao + 1) % 4;
+                sourceRecEquacao.x = (float)(currentFrameEquacao * 540.0f); 
         }
 
         

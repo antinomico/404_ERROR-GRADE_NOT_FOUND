@@ -113,51 +113,35 @@ void BossSD::ContagemChoque(){
 void BossSD::ContagemMapaK(){
 
 	if (timer < 60) {
-		DrawText("RÁPIDO! PISE NO 1! 15", 235, 80, 50, RED);
-	}
-	else if (timer < 120) {
-		DrawText("RÁPIDO! PISE NO 1! 14", 235, 80, 50, RED);
-	}
-	else if (timer < 180) {
-		DrawText("RÁPIDO! PISE NO 1! 13", 235, 80, 50, RED);
-	}
-	else if (timer < 240) {
-		DrawText("RÁPIDO! PISE NO 1! 12", 235, 80, 50, RED);
-	}
-	else if (timer < 300) {
-		DrawText("RÁPIDO! PISE NO 1! 11", 235, 80, 50, RED);
-	}
-	else if (timer < 360) {
 		DrawText("RÁPIDO! PISE NO 1! 10", 235, 80, 50, RED);
 	}
-	else if (timer < 420) {
+	else if (timer < 120) {
 		DrawText("RÁPIDO! PISE NO 1! 9", 235, 80, 50, RED);
 	}
-	else if (timer < 480) {
+	else if (timer < 180) {
 		DrawText("RÁPIDO! PISE NO 1! 8", 235, 80, 50, RED);
 	}
-	else if (timer < 540) {
+	else if (timer < 240) {
 		DrawText("RÁPIDO! PISE NO 1! 7", 235, 80, 50, RED);
 	}
-	else if (timer < 600) {
+	else if (timer < 300) {
 		DrawText("RÁPIDO! PISE NO 1! 6", 235, 80, 50, RED);
 	}
-	else if (timer < 660) {
+	else if (timer < 360) {
 		DrawText("RÁPIDO! PISE NO 1! 5", 235, 80, 50, RED);
 	}
-	else if (timer < 720) {
+	else if (timer < 420) {
 		DrawText("RÁPIDO! PISE NO 1! 4", 235, 80, 50, RED);
 	}
-	else if (timer < 780) {
+	else if (timer < 480) {
 		DrawText("RÁPIDO! PISE NO 1! 3", 235, 80, 50, RED);
 	}
-	else if (timer < 840) {
+	else if (timer < 540) {
 		DrawText("RÁPIDO! PISE NO 1! 2", 235, 80, 50, RED);
 	}
-	else if (timer < 900) {
+	else if (timer < 600) {
 		DrawText("RÁPIDO! PISE NO 1! 1", 235, 80, 50, RED);
 	}
-
 
 
 }

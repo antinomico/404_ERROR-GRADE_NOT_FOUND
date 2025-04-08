@@ -60,7 +60,7 @@ void Player::UpdatePlayer(int i) {
     if (dash_t >= 150) dash_t = 0; // Reset do timer do dash
 
 
-    if (i != 5) {
+    if (i != 5 && vivo == true) {
         // ============================== CIMA ================================ //
         if (IsKeyDown(KEY_W)) {
 
