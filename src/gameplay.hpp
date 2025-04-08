@@ -14,7 +14,9 @@ class Player {
 		void AnimUpdate();
 		void Draw();
 		void Unload();
-		
+
+		bool CollisionMesas() const;
+
 		Vector2 getPosition() const;
 	private:
 		Vector2 position;

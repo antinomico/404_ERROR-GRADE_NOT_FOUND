@@ -15,6 +15,10 @@ typedef enum GameScreen {
     ENDING = 5
 };
 
+typedef struct OptionFonts {
+	const char* name;
+}   OptionFonts;
+
 // variáveis globais (compartilhadas entre as telas)
 extern GameScreen currentScreen;
 extern Font font;
@@ -64,6 +68,9 @@ class LogoCINScreen {
         bool Finish() const;
 
     private:
+        Image cin_image;
+        Texture2D texture;
+
         int framesCounter;
         bool finishScreen;
 
@@ -75,9 +82,6 @@ class LogoCINScreen {
         float scale;
         float fadeSpeed;
         float alpha;
-
-        Image cin_image;
-        Texture2D texture;
 
         float visibleWidth;
         float revealSpeed;
@@ -91,11 +95,21 @@ class TitleScreen {
         
         void Init();
         void Update();
-        void Draw();
+        void Draw() const;
         void Unload();
         int Finish();
 
     private:
+        Vector2 pos_title;
+
+		Image title_image;
+		Image buttons_image;
+
+		Texture2D texture_title;
+		Texture2D texture_buttons;
+
+        OptionFonts option_fonts[3];
+
         int framesCounter;
         int finishScreen;
 
@@ -109,8 +123,6 @@ class TitleScreen {
         int option_height;
 
         int screen_select[3];
-
-        Vector2 pos_title;
 };
 
 // tela de opções

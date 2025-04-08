@@ -73,10 +73,14 @@ void GameplayScreen::Draw() {
 		player.Draw();
 	}
 	else if (state == TRANSITION) {
-		// tela de transição
+		// tela de transição e init do player
 	}
 	else if (state == AL_BATTLE) {
 		// tela de batalha
+		player.PosUpdate();
+		player.AnimUpdate();
+		player.Draw();
+
 	}
 	else if (state == EPILOGUE) {
 		// tela de epilogo

@@ -41,6 +41,23 @@ void Player::Init(Vector2 position, float health) {
 	state = IDLE;
 }
 
+bool Player::CollisionMesas() const {
+	if ((57 <= position.x && position.x <= 354) && (490 <= position.y && position.y <= 495)) return true;
+	else if ((575 <= position.x && position.x <= 865) && (487 <= position.y && position.y <= 492)) return true;     //table7
+
+	else if ((150 <= position.x && position.x <= 500) && (165 <= position.y && position.y <= 170)) return true;
+	else if ((740 <= position.x && position.x <= 1021) && (163 <= position.y && position.y <= 168)) return true;     //table4
+
+	else if ((110 <= position.x && position.x <= 445) && (270 <= position.y && position.y <= 275)) return true;
+	else if ((664 <= position.x && position.x <= 999) && (269 <= position.y && position.y <= 287)) return true;      //table5
+
+	else if ((50 <= position.x && position.x <= 400) && (380 <= position.y && position.y <= 385)) return true;
+	else if ((640 <= position.x && position.x <= 930) && (364 <= position.y && position.y <= 387)) return true;     //table6
+
+	return false;
+}
+
+
 void Player::PosUpdate() {
 	if (health <= 0) {
 	}
@@ -80,9 +97,27 @@ void Player::PosUpdate() {
 
 		if (Vector2Length(direction) > 0) {
 			direction = Vector2Normalize(direction);
+			
 			position.x += direction.x * speed;
+			if (CollisionMesas()) {
+				position.x -= direction.x * speed;
+			}
+			
 			position.y += direction.y * speed;
+			if (CollisionMesas()) {
+				position.y -= direction.y * speed;
+			}
 		}
+
+		if (position.x <= 0)
+			position.x = 0;
+		else if (position.x >= GetScreenWidth() - width)
+			position.x = GetScreenWidth() - width;
+		
+		if (position.y <= 0)
+			position.y = 0;
+		else if (position.y >= GetScreenHeight() - height)
+			position.y = GetScreenHeight() - height;
 	}
 }
 

@@ -56,6 +56,12 @@
     <Image Include="..\assets\cin_logo.png">
       <Filter>Arquivos de Recurso</Filter>
     </Image>
+    <Image Include="rsc\buttons.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
+    <Image Include="rsc\fundomenu.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="screens.hpp">

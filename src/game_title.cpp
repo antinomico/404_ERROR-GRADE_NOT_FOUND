@@ -9,7 +9,7 @@ OptionsScreen optionsScreen;
 GameplayScreen gameplayScreen;
 EndingScreen endingScreen;
 
-GameScreen currentScreen = LOGO_RL;
+GameScreen currentScreen = TITLE;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
@@ -41,8 +41,8 @@ int main(void) {
     //PlayMusicStream(music);
 
     // Setup and init first screen
-    currentScreen = GAMEPLAY;
-    gameplayScreen.Init();
+    //currentScreen = GAMEPLAY;
+    titleScreen.Init();
     //logoScreenRL.Init();
 
 #if defined(PLATFORM_WEB)
