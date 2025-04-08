@@ -56,10 +56,10 @@
     <Image Include="..\assets\cin_logo.png">
       <Filter>Arquivos de Recurso</Filter>
     </Image>
-    <Image Include="rsc\buttons.png">
+    <Image Include="rsc\fundomenu.png">
       <Filter>Arquivos de Recurso</Filter>
     </Image>
-    <Image Include="rsc\fundomenu.png">
+    <Image Include="rsc\buttonss.png">
       <Filter>Arquivos de Recurso</Filter>
     </Image>
   </ItemGroup>

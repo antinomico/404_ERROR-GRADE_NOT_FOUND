@@ -16,7 +16,7 @@ TitleScreen::~TitleScreen() {
 void TitleScreen::Init() {
 
 	title_image = LoadImage("rsc/fundomenu.png");
-	buttons_image = LoadImage("rsc/buttons.png");
+	buttons_image = LoadImage("rsc/buttonss.png");
     
     texture_title = LoadTextureFromImage(title_image);
     texture_buttons = LoadTextureFromImage(buttons_image);
