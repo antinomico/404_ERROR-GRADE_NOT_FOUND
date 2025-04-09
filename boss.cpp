@@ -15,12 +15,12 @@ BossSD::BossSD() {
 	timer = 0;
 	timer_chicotada = 0;
 	timer_choque = 0;
-	n_chicotada = 0;
-	//spriteBoss = LoadTexture("");
+	n_chicotada = 2;
+
 }
 
 BossSD::~BossSD() {
-	//UnloadTexture(spriteBoss);
+	UnloadTexture(spriteSD);
 }
 
 void BossSD::Health(Player P)
@@ -35,14 +35,15 @@ void BossSD::Health(Player P)
 	std::cout << p_atk_timer << std::endl;
 	if (p_atk_timer > 0) p_atk_timer += 0.8;
 	if (p_atk_timer >= 15) p_atk_timer = 0;
-	DrawRectangle(998, 34, lifeBarSD/1.3, 10, RED);
+	if ((etapa == 7 && timer < 300) || (etapa != 6 && etapa != 7)) {
+		DrawText("VIDA BOSS", 980, 10, 17, RED);
+		DrawRectangle(980, 34, lifeBarSD, 20, RED);
+	}
 }
 
 void BossSD::DrawSD() {
-    DrawRectangle(585, 148, 50, 50, BLUE);
-	//DrawTexture(spriteBoss, 0, 0, WHITE);
+	if ((etapa == 7 && timer < 300) || (etapa != 6 && etapa != 7)) DrawTexture(spriteSD, positionSD.x, positionSD.y, WHITE);
 }
-
 
 void BossSD::AtaqueSD(chicote* vec) {
 
@@ -54,12 +55,25 @@ void BossSD::AtaqueSD(chicote* vec) {
 
 }
 
-// Fazer chicotada por 1min (?)
-// A cada x segundos, o boss dá uma chicotada alternando entre cima, baixo, esquerda e direita, e o player precisa se esquivar e tentar atacar o boss
 void BossSD::Chicotada(chicote* vec){
 	if (timer_chicotada == 0 && vec->reverse == 0) {
-        float dx = -167;
-        float dy =  412;
+		float dx, dy;
+		if (n_chicotada%3 == 0)
+		{
+			dx = -167;
+			dy =  412;
+		}
+		else if (n_chicotada%3 == 1)
+		{
+			dx = 423;
+			dy = 15;
+		}
+		else if (n_chicotada%3 == 2)
+		{
+			dx = -500;
+			dy = 22;
+		}
+		//std::cout << "numero" << n_chicotada << std::endl;
 
         if (vec->cx <= positionSD.x && vec->cy <= positionSD.y) vec->reverse  = 0;
 
@@ -81,12 +95,13 @@ void BossSD::Chicotada(chicote* vec){
         }
         else
         {
+				n_chicotada++;
                 vec->reverse = 0;
                 vec->cx = positionSD.x;
                 vec->cy = positionSD.y;
         }
 
-        if (vec->reverse == 0) DrawLine(positionSD.x, positionSD.y, vec->cx, vec->cy, RED);
+        if (vec->reverse == 0) DrawLine(positionSD.x, positionSD.y, vec->cx, vec->cy, BLUE);
     }
     else if (vec->reverse == 1)
     {
@@ -99,7 +114,6 @@ void BossSD::Chicotada(chicote* vec){
     }
 
 }
-
 
 void BossSD::ContagemChoque(){
 

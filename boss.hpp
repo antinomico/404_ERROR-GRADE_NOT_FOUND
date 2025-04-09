@@ -35,7 +35,7 @@ public:
 			   // 6 - TELA TRANSICAO
 			   // 7 - TELA DERROTA
 
-private:
 	Texture2D spriteSD;
-	float speedSD = 0.4;
+	float speedSD = 0.4;	   
+
 };

@@ -37,6 +37,10 @@ Texture2D spritesheet_final;
 Texture2D spritesheet_equacao;
 Texture2D spritesheet_inicial;
 
+
+Texture2D bossNormal;
+Texture2D bossMorto;
+
 Image background_SD_img;
 Image mesas_SD_img;
 Image mesaJailson_img;
@@ -142,8 +146,8 @@ int main() {
         Liberar();
         CloseAudioDevice();
         CloseWindow();
-	Vector2 mouse = GetMousePosition();
-	std::cout << mouse.x << ", " << mouse.y << std::endl;
+	//Vector2 mouse = GetMousePosition();
+	//std::cout << mouse.x << ",Z " << mouse.y << std::endl;
         return 0;
 }
 
@@ -154,6 +158,7 @@ void Init() {
         SetTargetFPS(60);
         InitPlayer();
         InitCenario();
+
 	vec.reverse = 1;
 	vec.cx = boss.positionSD.x;
 	vec.cy = boss.positionSD.y;
@@ -164,25 +169,31 @@ void Init() {
         estadoAnterior = 0;
         qualTela = 0;
 
+
+        bossNormal = LoadTexture("assets/bmo_boss.png");
+        bossMorto = LoadTexture("assets/bmo_dano.png");
+
+        boss.spriteSD = bossNormal;
+
 }
 
 void DesenhoPlayerMesas() {
-        if (player.y <= mesa1.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
+        if (player.y <= mesa1.y && ( (boss.etapa != 6 && boss.etapa != 7) || (boss.etapa == 7 && boss.timer < 300))) player.DrawPlayer();
         if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa1.texture, mesa1.x, mesa1.y, WHITE);
         if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa4.texture, mesa4.x, mesa4.y, WHITE);
-        if (player.y > mesa1.y && player.y <= mesa2.y && boss.etapa != 6 && boss.etapa != 7) player.DrawPlayer();
+        if (player.y > mesa1.y && ( (boss.etapa != 6 && boss.etapa != 7) || (boss.etapa == 7 && boss.timer < 300))) player.DrawPlayer();
 
         if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa2.texture, mesa2.x, mesa2.y, WHITE);
         if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa5.texture, mesa5.x, mesa5.y, WHITE);
-        if (player.y > mesa2.y && player.y <= mesa3.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
+        if (player.y > mesa2.y && ( (boss.etapa != 6 && boss.etapa != 7) || (boss.etapa == 7 && boss.timer < 300))) player.DrawPlayer();
 
         if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa3.texture, mesa3.x, mesa3.y, WHITE);
         if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa6.texture, mesa6.x, mesa6.y, WHITE);
-        if (player.y > mesa3.y && player.y <= mesa7.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
+        if (player.y > mesa3.y && player.y <= mesa7.y && ( (boss.etapa != 6 && boss.etapa != 7) || (boss.etapa == 7 && boss.timer < 300))) player.DrawPlayer();
 
         if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesa7.texture, mesa7.x, mesa7.y, WHITE);
         if (boss.etapa == 0 || boss.etapa == 1 || (boss.etapa == 7 && boss.timer < 300 && (estadoAnterior == 0 || estadoAnterior == 1))) DrawTexture(mesaJailson, 0, 492, WHITE);
-        if (player.y >= mesa7.y && ((boss.etapa != 6 && boss.etapa != 7) || ((boss.etapa == 7 && boss.timer < 300) || (boss.etapa == 6 && boss.timer < 180)))) player.DrawPlayer();
+        if (player.y >= mesa7.y && ( (boss.etapa != 6 && boss.etapa != 7) || (boss.etapa == 7 && boss.timer < 300))) player.DrawPlayer();
 }
 
 void DeterminarBackground() {
@@ -196,19 +207,18 @@ void DeterminarBackground() {
 
         else if (boss.etapa == 5 || (boss.etapa == 7 && boss.timer < 300 && estadoAnterior == 5)) DrawTexturePro(spritesheet_final, sourceRecFinal, destRecFinal, {0, 0}, 0.0f, WHITE);
 
-        // Vitoria
+        // Vitoria --------------- ALTERAR AQUI ---------------------------
         else if (boss.etapa == 6) DrawTexture(tela_gameover_SD, 0, 0, WHITE);
 
         // Derrota
         else if (boss.etapa == 7 && boss.timer >= 300) {
                 DrawTexture(tela_gameover_SD, 0, 0, WHITE);
-                boss.timer == 0;
         }
 }
 
 void MudarEtapa() {
         // CHICOTADA (1min) -> CONTAGEM
-        if (boss.timer >= 500 && boss.etapa == 0) {
+        if ((boss.lifeBarSD <= 0 || boss.timer >= 1800) && boss.etapa == 0) {
                 estadoAnterior = 0;
                 boss.etapa = 1;
                 boss.timer = 0;
@@ -256,8 +266,16 @@ void MudarEtapa() {
 
 void Etapas() {
 
+        
+        // Contagem
+        if (boss.etapa == 1) {
+                if (boss.lifeBarSD > 0) {
+                        player.vivo = false;
+                }
+        }
+
         // Choque
-        if (boss.etapa == 2) {
+        else if (boss.etapa == 2) {
 
                 if (player.EntreMesas()) {
                         player.vivo = false;
@@ -592,7 +610,6 @@ void VitoriaOuDerrota() {
 
                 // Animação bonequinho dead
 
-                // Quando passar 5 segundos, tela de game over
         }
 
         if (player.ganhou == true) {
@@ -605,7 +622,7 @@ void VitoriaOuDerrota() {
 
                 // Bonequinho vira GIF
 
-                // Quando passar cinco segundos, tela de vitória
+
         }
 }
 
@@ -666,21 +683,29 @@ void GIFsBack() {
 void Jogo() {
         DeterminarBackground();
         DesenhoPlayerMesas();
-        boss.DrawSD();
+
+        if (boss.etapa == 0 || (boss.etapa == 1 && boss.timer <= 180)) boss.DrawSD();
+
+        if (boss.lifeBarSD <= 0 && boss.timer <= 300) {
+                boss.spriteSD = bossMorto;
+        }
+        else if (boss.lifeBarSD > 0) {
+                boss.spriteSD = bossNormal;
+        }
+
         boss.AtaqueSD(&vec);
-        if ((player.x - vec.cx)*(player.x - vec.cx) + (player.y - vec.cy)*(player.y - vec.cy) <= 2500 && boss.etapa == 0) player.vivo = false;
+        if ((player.x - vec.cx)*(player.x - vec.cx) + (player.y - vec.cy)*(player.y - vec.cy) <= 900 && boss.etapa == 0) player.vivo = false;
         else if (boss.etapa != 0) {vec.cx = boss.positionSD.x; vec.cy = boss.positionSD.y;}
         Etapas();
         MudarEtapa();
         VitoriaOuDerrota();
 
+        
+
         // Para fins debuguísticos
         std::cout << "TIMER: " << boss.timer << std::endl;
-        std::cout << "ETAPA: " << boss.etapa << std::endl;
+        //std::cout << "ETAPA: " << boss.etapa << std::endl;
 	
 	boss.Health(player);
 }
 
-void PortaHW() {
-
-}
