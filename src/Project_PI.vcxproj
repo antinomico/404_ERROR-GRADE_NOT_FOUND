@@ -132,15 +132,22 @@
   <ItemGroup>
     <ClCompile Include="ALBoss.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="atks_sapo.cpp" />
+    <ClCompile Include="boss.cpp" />
+    <ClCompile Include="BOSS_alg_vecATK_and_JUMP.cpp" />
     <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="game_title.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="EndingScreen.cpp" />
     <ClCompile Include="GameplayScreen.cpp" />
+    <ClCompile Include="globals.cpp" />
+    <ClCompile Include="linguada.cpp" />
     <ClCompile Include="LogoCINScreen.cpp" />
     <ClCompile Include="LogoRLScreen.cpp" />
+    <ClCompile Include="mesaHW.cpp" />
+    <ClCompile Include="newgame.cpp" />
     <ClCompile Include="OptionsScreen.cpp" />
-    <ClCompile Include="SDBoss.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="SD_GAME.cpp" />
     <ClCompile Include="TitleScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -152,9 +159,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.hpp" />
+    <ClInclude Include="atks_sapo.hpp" />
+    <ClInclude Include="boss.hpp" />
     <ClInclude Include="gameplay.hpp" />
+    <ClInclude Include="globals.hpp" />
     <ClInclude Include="hud.hpp" />
+    <ClInclude Include="linguada.hpp" />
+    <ClInclude Include="mesaHW.hpp" />
+    <ClInclude Include="movement.hpp" />
+    <ClInclude Include="player.hpp" />
     <ClInclude Include="screens.hpp" />
+    <ClInclude Include="sd_game.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Media Include="rsc\coin.wav" />

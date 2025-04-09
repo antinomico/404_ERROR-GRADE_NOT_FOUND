@@ -9,7 +9,7 @@ OptionsScreen optionsScreen;
 GameplayScreen gameplayScreen;
 EndingScreen endingScreen;
 
-GameScreen currentScreen = GAMEPLAY;
+GameScreen currentScreen = TITLE;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
@@ -31,7 +31,7 @@ static void UpdateDrawFrame(void);
 
 int main(void) {
     InitWindow(screenWidth, screenHeight, "Project PI");
-
+    SetExitKey(0);
     // Load global data (assets that must be available in all screens, i.e. font)
     font = LoadFont("rsc/mecha.png");
     music = LoadMusicStream("resources/ambient.ogg");
@@ -42,7 +42,7 @@ int main(void) {
 
     // Setup and init first screen
     //currentScreen = GAMEPLAY;
-    gameplayScreen.Init();
+    titleScreen.Init();
     //logoScreenRL.Init();
 
 #if defined(PLATFORM_WEB)
