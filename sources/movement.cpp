@@ -6,13 +6,20 @@
 
 void movement()
 {
+    bool se_movendo = false;
+    float frameTime = GetFrameTime();
+
     if (dash_t > 10) dash_t++;                                          //timer do dash, ele é empregado de modo que o jogador não possa ficar usando o dash indefinidamente
     if (dash_t >= 150) dash_t = 0;                                      //se o dash_timer for maior que o intervalo de tempo de espera, resete ele, o jogador pode usar o dash
 
     if (IsKeyDown(KEY_W))
     {
+        P.dirAtual = COSTAS;
+        se_movendo = true;
+
         P.sword.y = -5;
         P.sword.x = 0;
+
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))                //dash timer <= 50 é para que o dash seja perceptível e suave para o jogador.
         {
             if ((P.posicao.y - P.raio_do_player - 20) < 50) P.posicao.y = 50 + P.raio_do_player;
@@ -27,8 +34,12 @@ void movement()
 
     if (IsKeyDown(KEY_A))
     {
+        P.dirAtual = ESQUERDA;
+
         if (!IsKeyDown(KEY_W) && !IsKeyDown(KEY_S)) P.sword.y = 0;
         P.sword.x = -5;
+        se_movendo = true;
+
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))                //dash timer <= 50 é para que o dash seja perceptível e suave para o jogador.
         {
             if ((P.posicao.x - P.raio_do_player - 20) < 0) P.posicao.x = P.raio_do_player;
@@ -43,8 +54,12 @@ void movement()
 
     if (IsKeyDown(KEY_S))
     {
+        P.dirAtual = FRENTE;
+
         if (!IsKeyDown(KEY_A) && !IsKeyDown(KEY_D)) P.sword.x = 0;
         P.sword.y = 5;
+        se_movendo = true;
+
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))                //dash timer <= 50 é para que o dash seja perceptível e suave para o jogador.
         {
             if ((Vres - P.posicao.y - P.raio_do_player) < 20) P.posicao.y += (Vres - P.posicao.y - P.raio_do_player);
@@ -59,8 +74,12 @@ void movement()
 
     if (IsKeyDown(KEY_D))
     {
+        P.dirAtual = DIREITA;
+
         if (!IsKeyDown(KEY_W) && !IsKeyDown(KEY_S)) P.sword.y = 0;
         P.sword.x = 5;
+        se_movendo = true;
+
         if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))                //dash timer <= 50 é para que o dash seja perceptível e suave para o jogador.
         {
             if ((Hres - P.posicao.x - P.raio_do_player) < 20) P.posicao.x += (Hres - P.posicao.x - P.raio_do_player);
@@ -72,18 +91,33 @@ void movement()
 
         else if ((P.posicao.x + P.raio_do_player + 4) < Hres) P.posicao.x += 4;
     }
-    if (P.sword.x*P.sword.x == P.sword.y*P.sword.y && P.sword.x*P.sword.x == 25)
+
+    if (P.sword.x * P.sword.x == P.sword.y * P.sword.y && P.sword.x * P.sword.x == 25)
     {
-            P.sword.x = (5.0/(1.4))*(P.sword.x/(abs(P.sword.x)));
-            P.sword.y = (5.0/(1.4))*(P.sword.y/(abs(P.sword.y)));
+        P.sword.x = (5.0 / (1.4)) * (P.sword.x / (abs(P.sword.x)));
+        P.sword.y = (5.0 / (1.4)) * (P.sword.y / (abs(P.sword.y)));
     }
-    float x_center = P.posicao.x + 6*P.sword.x;
-    float y_center = P.posicao.y + 6*P.sword.y; 
+
+    if (se_movendo) {
+        P.timer_animacao += frameTime;
+
+        if (P.timer_animacao >= 0.2;){
+            P.frame = (P.frame + 1) % 3;
+            P.timer_animacao = 0.0;
+        }
+    }
+
+    else {
+        P.frame = 0;
+        P.timer_animacao = 0.0;
+    }
+
+    float x_center = P.posicao.x + 6 * P.sword.x;
+    float y_center = P.posicao.y + 6 * P.sword.y;
     if (p_atk_timer > 0)
     {
-	DrawCircle(x_center, y_center, 5, RED);
-    	DrawCircle(6*P.sword.x*cos(PI/12) - 6*P.sword.y*sin(PI/12) + P.posicao.x, 6*P.sword.x*sin(PI/12) + 6*P.sword.y*cos(PI/12) + P.posicao.y, 5, RED);
-    	DrawCircle(6*P.sword.x*cos(PI/12) + 6*P.sword.y*sin(PI/12) + P.posicao.x,-6*P.sword.x*sin(PI/12) + 6*P.sword.y*cos(PI/12) + P.posicao.y, 5, RED);
+        DrawCircle(x_center, y_center, 5, RED);
+        DrawCircle(6 * P.sword.x * cos(PI / 12) - 6 * P.sword.y * sin(PI / 12) + P.posicao.x, 6 * P.sword.x * sin(PI / 12) + 6 * P.sword.y * cos(PI / 12) + P.posicao.y, 5, RED);
+        DrawCircle(6 * P.sword.x * cos(PI / 12) + 6 * P.sword.y * sin(PI / 12) + P.posicao.x, -6 * P.sword.x * sin(PI / 12) + 6 * P.sword.y * cos(PI / 12) + P.posicao.y, 5, RED);
     }
 }
-
