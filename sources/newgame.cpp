@@ -305,6 +305,42 @@ int main() {
     UnloadTexture(sapo_pulando_esq);
     UnloadTexture(sapo_pulando_frente);
 
+    UnloadImage(playerUP);
+    UnloadImage(playerUPR);
+    UnloadImage(playerUPL);
+
+    UnloadImage(playerDOWN);
+    UnloadImage(playerDOWNR);
+    UnloadImage(playerDOWNL);
+
+    UnloadImage(playerRIGHT);
+    UnloadImage(playerRIGHTR);
+    UnloadImage(playerRIGHTL);
+
+    UnloadImage(playerLEFT);
+    UnloadImage(playerLEFTR);
+    UnloadImage(playerLEFTL);
+
+    UnloadImage(IDLEC);
+    UnloadImage(IDLEF);
+    UnloadImage(IDLED);
+    UnloadImage(IDLEE);
+
+    UnloadImage(LINGC);
+    UnloadImage(LINGF);
+    UnloadImage(LINGD);
+    UnloadImage(LINGE);
+
+    UnloadImage(PORRC);
+    UnloadImage(PORRF);
+    UnloadImage(PORRD);
+    UnloadImage(PORRE);
+
+    UnloadImage(PULOC);
+    UnloadImage(PULOF);
+    UnloadImage(PULOD);
+    UnloadImage(PULOE);
+
     CloseWindow();
 
     return 0;
