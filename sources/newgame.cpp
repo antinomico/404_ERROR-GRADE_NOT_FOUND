@@ -100,6 +100,8 @@ int main() {
     InitWindow(Hres, Vres, "sapo");
     SetTargetFPS(60);
 
+    Texture2D background = LoadTexture("backALG_LIN.png");
+
     init();
 
     while (!WindowShouldClose()) {
@@ -107,26 +109,29 @@ int main() {
 
         ataques_sapo(controle_de_tempo);
         movement();
-	sword_hitbox_check(controle_de_tempo);
+	    sword_hitbox_check(controle_de_tempo);
 
         BeginDrawing();
         //
-        ClearBackground(BLACK);
+            ClearBackground(WHITE);
 
-        barras_vida();
-        acompanhar_cd();
+            DrawTexturePro(background, 0, 0, WHITE);
 
-        DrawCircle(P.posicao.x, P.posicao.y, P.raio_do_player, BLUE);
-        DrawCircle(S.posicao.x, S.posicao.y, S.raio_do_sapo, RED);
+            barras_vida();
+            acompanhar_cd();
 
-        if (S.porradao && S.duracao_porradao > 0) {
-            DrawCircleLines(S.posicao.x, S.posicao.y, 2.5 * S.raio_do_sapo, ORANGE);
-        }
+            DrawCircle(P.posicao.x, P.posicao.y, P.raio_do_player, BLUE);
+            DrawCircle(S.posicao.x, S.posicao.y, S.raio_do_sapo, RED);
+
+            if (S.porradao && S.duracao_porradao > 0) {
+                DrawCircleLines(S.posicao.x, S.posicao.y, 2.5 * S.raio_do_sapo, ORANGE);
+            }
 
         //
         EndDrawing();
     }
 
+    UnloadTexture(background);
     CloseWindow();
 
     return 0;
