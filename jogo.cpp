@@ -20,6 +20,7 @@ void InitPlayer();
 void InitCenario();
 void VitoriaOuDerrota();
 void GIFsBack();
+void Jogo();
 // ========================== //
 
 
@@ -34,6 +35,7 @@ Texture2D tela_gameover_SD;
 Texture2D spritesheet_choque;
 Texture2D spritesheet_final;
 Texture2D spritesheet_equacao;
+Texture2D spritesheet_inicial;
 
 Image background_SD_img;
 Image mesas_SD_img;
@@ -49,6 +51,9 @@ Rectangle destRecEquacao;
 
 Rectangle sourceRecFinal;
 Rectangle destRecFinal;
+
+Rectangle sourceRecInicial;
+Rectangle destRecInicial;
 
 chicote vec;
 
@@ -71,13 +76,24 @@ int currentFrameFinal;
 int frameCounterFinal;
 int frameDelayFinal;
 
+int currentFrameInicial;
+int totalFramesInicial;
+int framesPerRowInicial;
+int frameWidthInicial;
+int frameHeightInicial;
+int frameCounterInicial;
+int frameDelayInicial;
+
 int estadoAnterior;
+int qualTela; // 0 - Inicial // 1 - Jogo // 2 - Transição
+
 
 bool tocouChoque;
 bool tocouJequiti;
 bool tocouVitoria;
 bool tocouGameOver;
 bool foiZerado;
+bool finalGIF;
 // =============================== //
 
 
@@ -108,27 +124,17 @@ int main() {
 
                 GIFsBack();
 
-                boss.timer++;
-
                 BeginDrawing();
 
                         ClearBackground(BLACK);
 
-                        DeterminarBackground();
-                        DesenhoPlayerMesas();
-                        boss.DrawSD();
-			//boss.Chicotada(player, &vec);
-                        boss.AtaqueSD(player, &vec);
-			if ((player.x - vec.cx)*(player.x - vec.cx) + (player.y - vec.cy)*(player.y - vec.cy) <= 2500 && boss.etapa == 0) player.vivo = false;
-			else if (boss.etapa != 0) {vec.cx = boss.positionSD.x; vec.cy = boss.positionSD.y;}
-                        Etapas();
-                        MudarEtapa();
-                        VitoriaOuDerrota();
-
-                        // Para fins debuguísticos
-                        std::cout << "TIMER: " << boss.timer << std::endl;
-                        std::cout << "ETAPA: " << boss.etapa << std::endl;
-
+                        if (qualTela == 0) {
+                                DrawTexturePro(spritesheet_inicial, sourceRecInicial, destRecInicial, {0, 0}, 0.0f, WHITE);
+                        }
+                        if (qualTela == 1) {
+                                boss.timer++;
+                                Jogo();
+                        }
 
                 EndDrawing();
         }
@@ -155,6 +161,7 @@ void Init() {
 	boss.timer_chicotada = 0;
 
         estadoAnterior = 0;
+        qualTela = 0;
 
 }
 
@@ -489,8 +496,19 @@ void InitCenario() {
         frameCounterEquacao = 0;
         frameDelayEquacao = 15;
 
+        spritesheet_inicial = LoadTexture("assets/inicio_sd.png");
+        sourceRecInicial = { 0.0f, 0.0f, 540.0f, 360.0f };
+        destRecInicial = { 0.0f, 0.0f, Hres, Vres };
+        totalFramesInicial = 34;
+        framesPerRowInicial = 10;
+        frameWidthInicial = 540;
+        frameHeightInicial = 360;
+        frameCounterInicial = 0;
+        frameDelayInicial = 20;
+
 
         foiZerado = false;
+        finalGIF = false;
         // ====================================================== //
 
 
@@ -612,5 +630,54 @@ void GIFsBack() {
                 sourceRecEquacao.x = (float)(currentFrameEquacao * 540.0f); 
         }
 
+        frameCounterInicial++;
+        if (frameCounterInicial > frameDelayInicial) {
+                frameCounterInicial = 0;
+
+
+                if (currentFrameInicial < 33) {
+
+
+                        // Avança o frame atual com looping
+                        currentFrameInicial = (currentFrameInicial + 1) % totalFramesInicial;
+
+                
+
+                        // Calcula coluna e linha na nova grade
+                        int col = currentFrameInicial % framesPerRowInicial;
+                        int row = currentFrameInicial / framesPerRowInicial;
+
+                        // Atualiza a região de origem (sourceRec)
+                        sourceRecInicial.x = (float)(col * frameWidthInicial);
+                        sourceRecInicial.y = (float)(row * frameHeightInicial);
+
+                }
+
+                else {
+                        qualTela = 1;
+                }
+        }
         
+          
+        
+}
+
+void Jogo() {
+        DeterminarBackground();
+        DesenhoPlayerMesas();
+        boss.DrawSD();
+        boss.AtaqueSD(player, &vec);
+        if ((player.x - vec.cx)*(player.x - vec.cx) + (player.y - vec.cy)*(player.y - vec.cy) <= 2500 && boss.etapa == 0) player.vivo = false;
+        else if (boss.etapa != 0) {vec.cx = boss.positionSD.x; vec.cy = boss.positionSD.y;}
+        Etapas();
+        MudarEtapa();
+        VitoriaOuDerrota();
+
+        // Para fins debuguísticos
+        std::cout << "TIMER: " << boss.timer << std::endl;
+        std::cout << "ETAPA: " << boss.etapa << std::endl;
+}
+
+void PortaHW() {
+
 }
