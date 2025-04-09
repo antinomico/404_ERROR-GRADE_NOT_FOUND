@@ -8,13 +8,6 @@
 #define Hres 1080
 #define Vres 720
 
-/*
-Texto para iniciar a fase:
-
-Agora xxxxx precisa enfrentar o terror das quintas-feiras: o laboratório de hardware!
-Lembre de pegar a caixa de fios de Jailson para poder combater o boss!
-*/
-
 
 // FUNÇÕES ================= //
 void Init();
@@ -28,7 +21,6 @@ void InitCenario();
 void VitoriaOuDerrota();
 void GIFsBack();
 // ========================== //
-
 
 
 
