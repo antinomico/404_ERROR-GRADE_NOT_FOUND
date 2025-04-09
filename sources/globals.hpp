@@ -11,6 +11,13 @@
 
 #define P_ATK_COOLDOWN 0.5
 
+enum Direcao {
+    FRENTE,
+    COSTAS,
+    ESQUERDA,
+    DIREITA
+};
+
 struct coords {
     float x;
     float y;
@@ -22,8 +29,13 @@ struct Player {
     float raio_do_player = 20.0f;
     int vida_jogador = 100;
 
+    Direcao dirAtual = FRENTE;
+    int frame = 0;
+    float timer_animacao = 0.0;
+
     bool morto = false;
 }; typedef struct Player player;// player P;
+
 struct Sapo {
     coords posicao;
     coords posicao_inicial;
