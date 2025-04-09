@@ -13,9 +13,10 @@ class BossSD {
 public:
 	BossSD();
 	~BossSD();
+	void Health(Player P);
 	void DrawSD();
-	void AtaqueSD(Player P, chicote* vec);
-	void Chicotada(Player P, chicote* vec);
+	void AtaqueSD(chicote* vec);
+	void Chicotada(chicote* vec);
 	void ContagemChoque();
 	void ContagemMapaK();
 	Vector2 positionSD;
@@ -23,6 +24,8 @@ public:
 	int timer;
 	int timer_choque;
 	int n_chicotada;
+	float p_atk_timer = 0;
+	float lifeBarSD = 100;
 	int etapa; // 0 - FUNDO NORMAL (CHICOTADA) 
 			   // 1 - CONTAGEM 
 			   // 2 - CHOQUE 
@@ -34,6 +37,5 @@ public:
 
 private:
 	Texture2D spriteSD;
-	float lifeBarSD = 100.00;
 	float speedSD = 0.4;
 };

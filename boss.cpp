@@ -6,6 +6,8 @@
 #define Hres 1080
 #define Vres 720
 
+#define P_ATK_COOLDOWN 5;
+
 BossSD::BossSD() {
 	positionSD.x = 588;
 	positionSD.y = 115;
@@ -14,12 +16,26 @@ BossSD::BossSD() {
 	timer_chicotada = 0;
 	timer_choque = 0;
 	n_chicotada = 0;
-
 	//spriteBoss = LoadTexture("");
 }
 
 BossSD::~BossSD() {
 	//UnloadTexture(spriteBoss);
+}
+
+void BossSD::Health(Player P)
+{
+	float t_x = P.x + 20;
+	float t_y = P.x + 50; //configurar timer!
+	if (((positionSD.x - P.x)*(positionSD.x - P.x) + (positionSD.y - P.y)*(positionSD.y - P.y) <= 10000) && IsKeyDown(KEY_P) && p_atk_timer == 0) {
+		lifeBarSD = lifeBarSD - 5; 
+		p_atk_timer++;
+		std:: cout << "hit" << std::endl;
+	}
+	std::cout << p_atk_timer << std::endl;
+	if (p_atk_timer > 0) p_atk_timer += 0.8;
+	if (p_atk_timer >= 15) p_atk_timer = 0;
+	DrawRectangle(998, 34, lifeBarSD/1.3, 10, RED);
 }
 
 void BossSD::DrawSD() {
@@ -28,10 +44,10 @@ void BossSD::DrawSD() {
 }
 
 
-void BossSD::AtaqueSD(Player P, chicote* vec) {
+void BossSD::AtaqueSD(chicote* vec) {
 
 	if (etapa == 0){ 
-		Chicotada(P,vec);
+		Chicotada(vec);
 	}
 	else if (etapa == 1) ContagemChoque();
 	else if (etapa == 4) ContagemMapaK();
@@ -40,7 +56,7 @@ void BossSD::AtaqueSD(Player P, chicote* vec) {
 
 // Fazer chicotada por 1min (?)
 // A cada x segundos, o boss dá uma chicotada alternando entre cima, baixo, esquerda e direita, e o player precisa se esquivar e tentar atacar o boss
-void BossSD::Chicotada(Player P, chicote* vec){
+void BossSD::Chicotada(chicote* vec){
 	if (timer_chicotada == 0 && vec->reverse == 0) {
         float dx = -167;
         float dy =  412;
@@ -77,8 +93,8 @@ void BossSD::Chicotada(Player P, chicote* vec){
             timer_chicotada += 1;
             vec->cx = positionSD.x;
             vec->cy = positionSD.y;
-            vec->dex = P.x;
-            vec->dey = P.y;
+            //vec->dex = P.x;
+            //vec->dey = P.y;
             if (timer_chicotada >= 30) {timer_chicotada = 0; vec->reverse = 0; n_chicotada++;}
     }
 

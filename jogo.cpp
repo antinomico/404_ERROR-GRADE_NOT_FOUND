@@ -135,14 +135,15 @@ int main() {
                                 boss.timer++;
                                 Jogo();
                         }
-
+		//função da hitbox aqui
                 EndDrawing();
         }
 
         Liberar();
         CloseAudioDevice();
         CloseWindow();
-
+	Vector2 mouse = GetMousePosition();
+	std::cout << mouse.x << ", " << mouse.y << std::endl;
         return 0;
 }
 
@@ -666,7 +667,7 @@ void Jogo() {
         DeterminarBackground();
         DesenhoPlayerMesas();
         boss.DrawSD();
-        boss.AtaqueSD(player, &vec);
+        boss.AtaqueSD(&vec);
         if ((player.x - vec.cx)*(player.x - vec.cx) + (player.y - vec.cy)*(player.y - vec.cy) <= 2500 && boss.etapa == 0) player.vivo = false;
         else if (boss.etapa != 0) {vec.cx = boss.positionSD.x; vec.cy = boss.positionSD.y;}
         Etapas();
@@ -676,6 +677,8 @@ void Jogo() {
         // Para fins debuguísticos
         std::cout << "TIMER: " << boss.timer << std::endl;
         std::cout << "ETAPA: " << boss.etapa << std::endl;
+	
+	boss.Health(player);
 }
 
 void PortaHW() {

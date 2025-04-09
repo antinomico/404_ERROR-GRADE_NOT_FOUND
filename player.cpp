@@ -6,7 +6,7 @@
 #define Vres 720
 
 #define angle 24.9547f
-
+#define P_ATK_COOLDOWN 5
 
 Player::Player() {
     largura = 47;
@@ -16,6 +16,7 @@ Player::Player() {
     vida = 100.0f;
     vivo = true;
     ganhou = false;
+    p_atk_timer = 0;;
 };
 
 Player::~Player() {};
@@ -43,9 +44,20 @@ bool Player::CollisionMesas() {
     else return false;
 }
 
+void Player::check_hitbox()
+{
+	if (IsKeyDown(KEY_P) && p_atk_timer == 0)
+        {
+                p_atk_timer += 0.8;
+		//DrawCircle(x + 20,y + 50,50,RED); //hitbox em questão.
+                //if ((S.posicaoSD.x - at_x)(S.posicaoSD.x - at_x) + (S.posicaoSD.y - at_y)(S.posicaoSD.y - at_y) <= 2500);
+                //else if ((S.x - at1_x)(S.posicaoSD.x - at1_x) + (S.posicaoSD.y - at1_y)(S.posicaoSD.y - at1_y) <= 2500)
+                //else if ((S.x - at2_x)(S.posicaoSD.x - at2_x) + (S.posicaoSD.y - at2_y)(S.posicaoSD.y - at2_y) <= 2500)
 
-
-
+        }
+        else if (p_atk_timer > 0) p_atk_timer += 0.8;
+        if (p_atk_timer >= P_ATK_COOLDOWN) p_atk_timer = 0;
+}
 
 void Player::UpdatePlayer(int i) {
 
@@ -63,7 +75,8 @@ void Player::UpdatePlayer(int i) {
     if (i != 5 && vivo == true) {
         // ============================== CIMA ================================ //
         if (IsKeyDown(KEY_W)) {
-
+		sword_x = 0;
+		sword_y = -5;
             lastPos = 0;
             // POSIÇÃO =============================================== //
             if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
@@ -99,7 +112,7 @@ void Player::UpdatePlayer(int i) {
 
         // ========================= ESQUERDA ======================== //
         else if (IsKeyDown(KEY_A)) {
-            
+            sword_x = -5;
             lastPos = 2;
             // POSIÇÃO ======================================== //
             if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))
@@ -130,7 +143,8 @@ void Player::UpdatePlayer(int i) {
 
         // =========================== BAIXO ============================= //
         else if (IsKeyDown(KEY_S)) {
-            lastPos = 1;
+            sword_y = 5;
+	    lastPos = 1;
             // POSIÇÃO ===================================== //
             if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL))
             {
@@ -166,7 +180,8 @@ void Player::UpdatePlayer(int i) {
 
         // ============================ DIREITA ================================= //
         else if (IsKeyDown(KEY_D)) {
-            lastPos = 3;
+            sword_x = 5;
+	    lastPos = 3;
             // POSIÇÃO =============================================== //
             if (dash_t <= 10 && IsKeyDown(KEY_LEFT_CONTROL)) {
                 x += speed_dash;
@@ -201,7 +216,11 @@ void Player::UpdatePlayer(int i) {
             else if (lastPos == 2) playerNOW = playerLEFT;
             else if (lastPos == 3) playerNOW = playerRIGHT;
         }
-
+	if (sword_x*sword_x == sword_y*sword_y && sword_x*sword_x == 25)
+	{
+		sword_x = (5.0/(1.4))*(sword_x/(abs(sword_x)));
+		sword_y = (5.0/(1.4))*(sword_y/(abs(sword_y)));
+	}
     }
 
     else {

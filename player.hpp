@@ -11,6 +11,8 @@ public:
 	~Player();
 
     float x, y;
+    float sword_x, sword_y;
+    float p_atk_timer;
     float largura;
     float altura;
     float speed;
@@ -28,6 +30,7 @@ public:
     Texture2D playerLEFT, playerLEFT_L, playerLEFT_R;
     Texture2D playerNOW;
 
+    void check_hitbox();
     void DrawPlayer();
     bool CollisionMesas();
     void UpdatePlayer(int i);
