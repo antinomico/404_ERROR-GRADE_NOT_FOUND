@@ -1,3 +1,4 @@
+
 #include "raylib.h"
 #include <cmath>
 #include <stdio.h>
@@ -54,18 +55,6 @@ void barras_vida() {
 //-----------------------------------------------------------//
 
 void acompanhar_cd() {
-    if (S.tempo_antes_de_pular) {
-        DrawText("PULO CARREGANDO", 20, 680, 20, WHITE);
-    }
-
-    if (S.tempo_antes_do_porradao) {
-        DrawText("PORRADÃO CARREGANDO", 20, 680, 20, WHITE);
-    }
-
-    if (S.tempo_antes_da_linguada) {
-        DrawText("LINGUADA CARREGANDO", 20, 680, 20, WHITE);
-    }
-
     if (P.morto) {
         DrawText("MORREU", 500, 20, 20, WHITE);
     }
@@ -76,22 +65,22 @@ void acompanhar_cd() {
 
 void sword_hitbox_check(float fps_routine)
 {
-	float at_x = P.posicao.x + 6*P.sword.x;
-	float at_y = P.posicao.y + 6*P.sword.y;
-	float at1_x = 6*P.sword.x*cos(PI/12) - 6*P.sword.y*sin(PI/12) + P.posicao.x;
-	float at1_y = 6*P.sword.x*sin(PI/12) + 6*P.sword.y*cos(PI/12) + P.posicao.y;
-	float at2_x = 6*P.sword.x*cos(PI/12) + 6*P.sword.y*sin(PI/12) + P.posicao.x;
-	float at2_y =-6*P.sword.x*sin(PI/12) + 6*P.sword.y*cos(PI/12) + P.posicao.y;
-	//var1: (S.posicao.x - at_x)² + (S.posicao.y - at_y)²
-	if (IsKeyDown(KEY_P) && p_atk_timer == 0)
-	{ 
-		p_atk_timer += fps_routine;
-		if ((S.posicao.x - at_x)*(S.posicao.x - at_x) + (S.posicao.y - at_y)*(S.posicao.y - at_y) <= S.raio_do_sapo*S.raio_do_sapo) S.vida_boss-=5;
-		else if ((S.posicao.x - at1_x)*(S.posicao.x - at1_x) + (S.posicao.y - at1_y)*(S.posicao.y - at1_y) <= S.raio_do_sapo*S.raio_do_sapo) S.vida_boss-=5;
-		else if ((S.posicao.x - at2_x)*(S.posicao.x - at2_x) + (S.posicao.y - at2_y)*(S.posicao.y - at2_y) <= S.raio_do_sapo*S.raio_do_sapo) S.vida_boss-=5;
-	}
-	else if (p_atk_timer > 0) p_atk_timer += fps_routine;
-	if (p_atk_timer >= P_ATK_COOLDOWN) p_atk_timer = 0;
+    float at_x = P.posicao.x + 6 * P.sword.x;
+    float at_y = P.posicao.y + 6 * P.sword.y;
+    float at1_x = 6 * P.sword.x * cos(PI / 12) - 6 * P.sword.y * sin(PI / 12) + P.posicao.x;
+    float at1_y = 6 * P.sword.x * sin(PI / 12) + 6 * P.sword.y * cos(PI / 12) + P.posicao.y;
+    float at2_x = 6 * P.sword.x * cos(PI / 12) + 6 * P.sword.y * sin(PI / 12) + P.posicao.x;
+    float at2_y = -6 * P.sword.x * sin(PI / 12) + 6 * P.sword.y * cos(PI / 12) + P.posicao.y;
+    //var1: (S.posicao.x - at_x)² + (S.posicao.y - at_y)²
+    if (IsKeyDown(KEY_P) && p_atk_timer == 0)
+    {
+        p_atk_timer += fps_routine;
+        if ((S.posicao.x - at_x) * (S.posicao.x - at_x) + (S.posicao.y - at_y) * (S.posicao.y - at_y) <= S.raio_do_sapo * S.raio_do_sapo) S.vida_boss -= 5;
+        else if ((S.posicao.x - at1_x) * (S.posicao.x - at1_x) + (S.posicao.y - at1_y) * (S.posicao.y - at1_y) <= S.raio_do_sapo * S.raio_do_sapo) S.vida_boss -= 5;
+        else if ((S.posicao.x - at2_x) * (S.posicao.x - at2_x) + (S.posicao.y - at2_y) * (S.posicao.y - at2_y) <= S.raio_do_sapo * S.raio_do_sapo) S.vida_boss -= 5;
+    }
+    else if (p_atk_timer > 0) p_atk_timer += fps_routine;
+    if (p_atk_timer >= P_ATK_COOLDOWN) p_atk_timer = 0;
 }
 
 //-----------------------------------------------------------//
@@ -102,6 +91,11 @@ int main() {
 
     Texture2D background = LoadTexture("backALG_LIN.png");
 
+    Rectangle fonte = {0.0, 0.0, (float)background.width, (float)background.height };
+    Rectangle destino = { 0.0, 0.0, (float)Hres, (float)Vres };
+    Vector2 origem = {0.0, 0.0 };
+    float ang_rot = 0.0;
+
     init();
 
     while (!WindowShouldClose()) {
@@ -109,23 +103,23 @@ int main() {
 
         ataques_sapo(controle_de_tempo);
         movement();
-	    sword_hitbox_check(controle_de_tempo);
+        sword_hitbox_check(controle_de_tempo);
 
         BeginDrawing();
         //
-            ClearBackground(WHITE);
+        ClearBackground(BLACK);
 
-            DrawTexturePro(background, 0, 0, WHITE);
+        DrawTexturePro(background, fonte, destino, origem, ang_rot, WHITE);
 
-            barras_vida();
-            acompanhar_cd();
+        barras_vida();
+        acompanhar_cd();
 
-            DrawCircle(P.posicao.x, P.posicao.y, P.raio_do_player, BLUE);
-            DrawCircle(S.posicao.x, S.posicao.y, S.raio_do_sapo, RED);
+        DrawCircle(P.posicao.x, P.posicao.y, P.raio_do_player, BLUE);
+        DrawCircle(S.posicao.x, S.posicao.y, S.raio_do_sapo, RED);
 
-            if (S.porradao && S.duracao_porradao > 0) {
-                DrawCircleLines(S.posicao.x, S.posicao.y, 2.5 * S.raio_do_sapo, ORANGE);
-            }
+        if (S.porradao && S.duracao_porradao > 0) {
+            DrawCircleLines(S.posicao.x, S.posicao.y, 2.5 * S.raio_do_sapo, ORANGE);
+        }
 
         //
         EndDrawing();
