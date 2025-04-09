@@ -41,12 +41,16 @@ void TitleScreen::Init() {
 
 	option_fonts[0].name = "PLAY";
 	option_fonts[1].name = "OPTIONS";
-	option_fonts[2].name = "EXIT";
+	option_fonts[2].name = "CREDITS";
 
     pos_title = { 10, 20 };
 }
 
 void TitleScreen::Update() {
+	if (IsKeyPressed(KEY_ESCAPE)) {
+		PlaySound(fxCoin);
+		finishScreen = -1;
+	}
     if (state == 0) {
 		index_select = -1;
         
@@ -95,7 +99,7 @@ void TitleScreen::Draw() const {
     
     if (state == 0) {
         for (int i = 0; i < 3; i++) {
-			Vector2 fontSize = MeasureTextEx(font, option_fonts[i].name, 50, 4);
+			Vector2 fontSize = MeasureTextEx(font, option_fonts[i].name.c_str(), 50, 4);
 
             if (i == index_select) {
                 DrawTexturePro(texture_buttons,
@@ -110,26 +114,26 @@ void TitleScreen::Draw() const {
                     { 0, 0 }, 0.0f, WHITE);
             }
 
-            DrawTextEx(font, option_fonts[i].name, { (float)GetScreenWidth() / 2 - fontSize.x / 2, (float)GetScreenHeight() / 2 - 5 * texture_buttons.height / 6 + i * size_ref_options + fontSize.y / 2 }, 50, 4, { 75, 29, 31, 255 });
+            DrawTextEx(font, option_fonts[i].name.c_str(), {(float)GetScreenWidth() / 2 - fontSize.x / 2, (float)GetScreenHeight() / 2 - 5 * texture_buttons.height / 6 + i * size_ref_options + fontSize.y / 2}, 50, 4, {75, 29, 31, 255});
         }
     }
     else if (state == 1) {
         for (int i = 0; i < 3; i++) {
-            Vector2 fontSize = MeasureTextEx(font, option_fonts[i].name, 50, 4);
+            Vector2 fontSize = MeasureTextEx(font, option_fonts[i].name.c_str(), 50, 4);
 
             if (i == index_select) {
                 DrawTexturePro(texture_buttons,
                     { 0, (float) 2 * texture_buttons.height / 3 , (float) texture_buttons.width, (float)texture_buttons.height / 3},
                     { (float)GetScreenWidth() / 2 - 5 * texture_buttons.width / 2, (float)GetScreenHeight() / 2 - 5 * texture_buttons.height / 6 + i * size_ref_options, (float) 5 * texture_buttons.width, (float) 5 * texture_buttons.height / 3 },
                     { 0, 0 }, 0.0f, WHITE);
-                DrawTextEx(font, option_fonts[i].name, { (float)GetScreenWidth() / 2 - fontSize.x / 2, (float)GetScreenHeight() / 2 - 5 * texture_buttons.height / 6 + i * size_ref_options + fontSize.y / 2 }, 50, 4, { 247, 183, 186, 255 });
+                DrawTextEx(font, option_fonts[i].name.c_str(), {(float)GetScreenWidth() / 2 - fontSize.x / 2, (float)GetScreenHeight() / 2 - 5 * texture_buttons.height / 6 + i * size_ref_options + fontSize.y / 2}, 50, 4, {247, 183, 186, 255});
             }
             else {
                 DrawTexturePro(texture_buttons,
                     { 0, 0, (float)texture_buttons.width, (float)texture_buttons.height / 3 },
                     { (float)GetScreenWidth() / 2 - 5 * texture_buttons.width / 2, (float)GetScreenHeight() / 2 - 5 * texture_buttons.height / 6 + i * size_ref_options, (float)5 * texture_buttons.width, (float)5 * texture_buttons.height / 3 },
                     { 0, 0 }, 0.0f, WHITE);
-                DrawTextEx(font, option_fonts[i].name, { (float)GetScreenWidth() / 2 - fontSize.x / 2, (float)GetScreenHeight() / 2 - 5 * texture_buttons.height / 6 + i * size_ref_options + fontSize.y / 2 }, 50, 4, { 75, 29, 31, 255 });
+                DrawTextEx(font, option_fonts[i].name.c_str(), {(float)GetScreenWidth() / 2 - fontSize.x / 2, (float)GetScreenHeight() / 2 - 5 * texture_buttons.height / 6 + i * size_ref_options + fontSize.y / 2}, 50, 4, {75, 29, 31, 255});
 
             }
         }

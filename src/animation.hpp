@@ -24,4 +24,24 @@ class Animation {
 		float scale;
 };
 
+class Dialog {
+	public:
+		Dialog();
+		Dialog(const Font font, int frameTime);
+
+		void Init(const char* text, Vector2 position);
+		void Update(int FrameTimes);
+		void Draw();
+		bool IsFinished() const;
+		void Unload() const;
+	private:
+		const Font font;
+		Vector2 position;
+
+		const char* text;
+		int indexWord;
+		int frameTime;
+		int frameCounter;
+};
+
 #endif // !ANIMATION_HPP

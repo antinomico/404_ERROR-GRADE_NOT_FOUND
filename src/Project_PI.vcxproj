@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClCompile Include="ALBoss.cpp" />
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="game_title.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="EndingScreen.cpp" />
@@ -146,11 +147,13 @@
     <Image Include="..\assets\cin_logo.png" />
     <Image Include="rsc\buttonss.png" />
     <Image Include="rsc\fundomenu.png" />
+    <Image Include="rsc\inicio_sd.png" />
     <Image Include="rsc\mecha.png" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.hpp" />
     <ClInclude Include="gameplay.hpp" />
+    <ClInclude Include="hud.hpp" />
     <ClInclude Include="screens.hpp" />
   </ItemGroup>
   <ItemGroup>

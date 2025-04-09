@@ -1,6 +1,10 @@
 #ifndef SCREENS_HPP
 #define SCREENS_HPP
 
+#include <iostream> using namespace std;
+#include <vector>
+#include <string>
+
 #include "raylib.h"
 #include "gameplay.hpp"
 
@@ -16,8 +20,12 @@ typedef enum GameScreen {
 };
 
 typedef struct OptionFonts {
-	const char* name;
+	std::string name;
 }   OptionFonts;
+
+typedef struct GameFonts {
+    std::string name;
+}   GameFonts;
 
 // variáveis globais (compartilhadas entre as telas)
 extern GameScreen currentScreen;
@@ -51,8 +59,8 @@ class LogoRLScreen {
         int bottomSideRecWidth;
         int rightSideRecHeight;
 
-        int state;              // Logo animation states
-        float alpha;            // Useful for fading
+        int state;
+        float alpha;
 };
 
 // tela de logo do CIn
@@ -156,12 +164,25 @@ class GameplayScreen {
         bool Finish() const;
         
     private:
+        Texture2D background;
+
         Player player;
+        Dialog dialogText;
+		GameFonts fontGame[4];
+
+        int currentIndexFontGame;
 
         int framesCounter;
         bool finishScreen;
 		int state;
         int lastState;
+
+        int frameCounterInicial;
+        int frameDelayInicial;
+        int currentFrameInicial;
+        int colFrameInicial;
+        int rowFrameInicial;
+
 };
 
 // tela de finalização
@@ -177,8 +198,13 @@ class EndingScreen {
         bool Finish() const;
 
     private:
+        Texture2D credits;
+        
         int framesCounter;
         bool finishScreen;
+        float alpha;
+
+        int state;
 };
 
 #endif // SCREENS_HPP

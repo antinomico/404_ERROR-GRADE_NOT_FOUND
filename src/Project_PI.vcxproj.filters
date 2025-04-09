@@ -48,6 +48,9 @@
     <ClCompile Include="ALBoss.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="Dialog.cpp">
+      <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="rsc\mecha.png">
@@ -62,6 +65,9 @@
     <Image Include="rsc\buttonss.png">
       <Filter>Arquivos de Recurso</Filter>
     </Image>
+    <Image Include="rsc\inicio_sd.png">
+      <Filter>Arquivos de Recurso</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="screens.hpp">
@@ -71,6 +77,9 @@
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="animation.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="hud.hpp">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>

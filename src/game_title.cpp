@@ -9,12 +9,12 @@ OptionsScreen optionsScreen;
 GameplayScreen gameplayScreen;
 EndingScreen endingScreen;
 
-GameScreen currentScreen = TITLE;
+GameScreen currentScreen = GAMEPLAY;
 Font font = { 0 };
 Music music = { 0 };
 Sound fxCoin = { 0 };
 
-static const int screenWidth = 1280;
+static const int screenWidth = 1080;
 static const int screenHeight = 720;
 
 static float transAlpha = 0.0f;
@@ -34,15 +34,15 @@ int main(void) {
 
     // Load global data (assets that must be available in all screens, i.e. font)
     font = LoadFont("rsc/mecha.png");
-    //music = LoadMusicStream("resources/ambient.ogg");
+    music = LoadMusicStream("resources/ambient.ogg");
     fxCoin = LoadSound("rsc/coin.wav");
 
-    //SetMusicVolume(music, 1.0f);
-    //PlayMusicStream(music);
+    SetMusicVolume(music, 1.0f);
+    PlayMusicStream(music);
 
     // Setup and init first screen
     //currentScreen = GAMEPLAY;
-    titleScreen.Init();
+    gameplayScreen.Init();
     //logoScreenRL.Init();
 
 #if defined(PLATFORM_WEB)
@@ -117,10 +117,10 @@ static void UpdateTransition(void) {
             switch (transToScreen) {
                 case LOGO_RL: logoScreenRL.Init(); break;
                 case LOGO_CIN: logoScreenCIN.Init(); break;
-                case TITLE: titleScreen.Init(); break;
-                case OPTIONS: optionsScreen.Init(); break;
-                case GAMEPLAY: gameplayScreen.Init(); break;
-                case ENDING: endingScreen.Init(); break;
+                case TITLE: titleScreen.Init(); SetExitKey(KEY_ESCAPE); break;
+                case OPTIONS: optionsScreen.Init(); SetExitKey(0); break;
+                case GAMEPLAY: gameplayScreen.Init(); SetExitKey(0); break;
+                case ENDING: endingScreen.Init(); SetExitKey(0); break;
                 default: break;
             }
 
