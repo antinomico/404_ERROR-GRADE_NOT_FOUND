@@ -89,7 +89,7 @@ int main() {
     InitWindow(Hres, Vres, "sapo");
     SetTargetFPS(60);
 
-    Texture2D background = LoadTexture("backALG_LIN.png");
+    Texture2D background = LoadTexture("assets/backALG_LIN.png");
 
     Rectangle fonte = {0.0, 0.0, (float)background.width, (float)background.height };
     Rectangle destino = { 0.0, 0.0, (float)Hres, (float)Vres };
